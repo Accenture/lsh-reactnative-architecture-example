@@ -64,16 +64,14 @@ import com.android.build.OutputFile
  *   // for example, you might want to remove it from here.
  *   inputExcludes: ["android/**", "ios/**"],
  *
- *   // override which node gets called and with what additional arguments
- *   nodeExecutableAndArgs: ["node"],
- *
  *   // supply additional arguments to the packager
  *   extraPackagerArgs: []
  * ]
  */
 
 project.ext.react = [
-    entryFile: "index.js"
+    entryFile: "index.js",
+    nodeExecutableAndArgs: ["/usr/local/bin/node"]
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
