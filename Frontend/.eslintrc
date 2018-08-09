@@ -1,0 +1,40 @@
+{
+    "parser"                                    : "babel-eslint",
+    "extends"                                   : "airbnb",
+    "plugins"                                   : ["react", "jsx-a11y", "import"],
+    "rules": {
+      "semi"                                    : ["error", "always"],
+      "import/extensions"                       : 0,
+      "react/jsx-filename-extension"            : ["off"],
+      "linebreak-style"                         : ["off"],
+      "no-undef"                                : ["error"],
+      "react/sort-comp"                         : ["off"],
+      "react/prefer-stateless-function"         : ["off"],
+      "object-curly-spacing"                    : [2, "always"],
+      "max-len"                                 : [2, 120, 2],
+      "jsx-quotes"                              : [2, "prefer-double"],
+      "import/no-extraneous-dependencies"       : 0,
+      "comma-dangle"                            : 0,
+      "global-require"                          : 0,
+      "arrow-parens"                            :"off",
+      "react/jsx-one-expression-per-line"       : 0,
+      "react/destructuring-assignment"          :"off",
+      "react/jsx-curly-brace-presence"          :"off",
+      "object-curly-newline"                    : 0,
+      "operator-linebreak"                      : [ "error", "after", {
+                                                                        "overrides": {
+                                                                                       ":": "before"
+                                                                                      }
+                                                                       }
+                                                   ],
+      "react/forbid-prop-types"                 : [2, { "forbid": ["any"] }]
+    },
+    "env": {
+      "jest"                                    : true,
+      "browser"                                 : true,
+      "node"                                    : true
+    },
+    "settings": {
+      "import/resolver"                         : "reactnative"
+    }
+  }

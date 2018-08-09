@@ -1,0 +1,7 @@
+{
+  "presets": ["react-native", "flow"],
+  "plugins": [
+    "transform-decorators-legacy",
+    "transform-class-properties"
+  ]
+}
