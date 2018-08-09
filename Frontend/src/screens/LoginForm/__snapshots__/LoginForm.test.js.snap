@@ -1,0 +1,135 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tests login form component matches snapshot 1`] = `
+<inject-Layout-with-featureToggleStore
+  headerText="AUTH_title"
+  hideDrawer={true}
+  onPress={[Function]}
+>
+  <Component
+    key="1"
+  >
+    <Card>
+      <CardSection>
+        <Input
+          label="Email"
+          onChangeText={[Function]}
+          placeholder="email@email.com"
+          secureTextEntry={false}
+          value=""
+        />
+      </CardSection>
+      <CardSection>
+        <Input
+          label="Password"
+          onChangeText={[Function]}
+          placeholder="*******"
+          secureTextEntry={true}
+          value=""
+        />
+      </CardSection>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "alignSelf": "center",
+            "color": "red",
+            "fontSize": 20,
+            "padding": 2,
+          }
+        }
+      />
+      <CardSection>
+        <Button
+          onPress={[Function]}
+        >
+          <Text
+            accessible={true}
+            allowFontScaling={true}
+            ellipsizeMode="tail"
+          >
+            Log In
+          </Text>
+        </Button>
+      </CardSection>
+    </Card>
+    <Component
+      style={
+        Object {
+          "display": "flex",
+          "flexDirection": "row",
+          "marginLeft": 130,
+          "marginTop": 20,
+          "padding": 15,
+        }
+      }
+    >
+      <TouchableOpacity
+        activeOpacity={0.2}
+        key="fi"
+        onPress={[Function]}
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "color": "#007aff",
+              "fontSize": 15,
+            }
+          }
+        >
+           
+          FI
+           
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        activeOpacity={0.2}
+        key="en"
+        onPress={[Function]}
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "color": "#007aff",
+              "fontSize": 15,
+            }
+          }
+        >
+           
+          EN
+           
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        activeOpacity={0.2}
+        key="sv"
+        onPress={[Function]}
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "color": "#007aff",
+              "fontSize": 15,
+            }
+          }
+        >
+           
+          SV
+           
+        </Text>
+      </TouchableOpacity>
+    </Component>
+  </Component>
+</inject-Layout-with-featureToggleStore>
+`;

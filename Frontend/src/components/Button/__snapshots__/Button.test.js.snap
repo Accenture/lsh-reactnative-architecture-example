@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tests button component matches snapshot 1`] = `
+<TouchableOpacity
+  activeOpacity={0.2}
+  onPress={[Function]}
+  style={
+    Object {
+      "alignSelf": "stretch",
+      "backgroundColor": "#fff",
+      "borderColor": "#007aff",
+      "borderRadius": 5,
+      "borderWidth": 1,
+      "flex": 1,
+      "marginLeft": 5,
+      "marginRight": 5,
+    }
+  }
+>
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    ellipsizeMode="tail"
+    style={
+      Object {
+        "alignSelf": "center",
+        "color": "#007aff",
+        "fontSize": 16,
+        "fontWeight": "600",
+        "paddingBottom": 10,
+        "paddingTop": 10,
+      }
+    }
+  />
+</TouchableOpacity>
+`;

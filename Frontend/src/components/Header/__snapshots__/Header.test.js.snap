@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tests header component matches snapshot 1`] = `
+<Component
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#F8F8F8",
+      "elevation": 2,
+      "flexDirection": "row",
+      "height": 60,
+      "justifyContent": "space-between",
+      "paddingTop": 15,
+      "position": "relative",
+      "shadowColor": "#000",
+      "shadowOffset": Object {
+        "height": 2,
+        "width": 0,
+      },
+      "shadowOpacity": 0.2,
+    }
+  }
+>
+  <Component
+    style={
+      Object {
+        "flexDirection": "row",
+        "padding": 10,
+      }
+    }
+  >
+    <TouchableOpacity
+      activeOpacity={0.2}
+      onPress={[Function]}
+    >
+      <Icon
+        color="black"
+        name="menu"
+        raised={false}
+        reverse={false}
+        reverseColor="white"
+        size={24}
+        underlayColor="white"
+      />
+    </TouchableOpacity>
+  </Component>
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    ellipsizeMode="tail"
+    style={
+      Object {
+        "fontSize": 20,
+      }
+    }
+  >
+    Header
+  </Text>
+  <TouchableOpacity
+    activeOpacity={0.2}
+    onPress={[Function]}
+  >
+    <Icon
+      color="black"
+      name="notifications-none"
+      raised={false}
+      reverse={false}
+      reverseColor="white"
+      size={24}
+      underlayColor="white"
+    />
+  </TouchableOpacity>
+</Component>
+`;

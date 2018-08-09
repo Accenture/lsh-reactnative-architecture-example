@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tests login input component matches snapshot 1`] = `
+<Component
+  style={
+    Object {
+      "alignItems": "center",
+      "flex": 1,
+      "flexDirection": "row",
+      "height": 40,
+    }
+  }
+>
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    ellipsizeMode="tail"
+    style={
+      Object {
+        "flex": 1,
+        "fontSize": 18,
+        "paddingLeft": 20,
+      }
+    }
+  >
+    label
+  </Text>
+  <TextInput
+    allowFontScaling={true}
+    autoCapitalize="none"
+    autoCorrect={false}
+    onChange={[Function]}
+    placeholder="enter here"
+    secureTextEntry={false}
+    style={
+      Object {
+        "color": "#000",
+        "flex": 2,
+        "fontSize": 18,
+        "lineHeight": 23,
+        "paddingLeft": 5,
+        "paddingRight": 5,
+      }
+    }
+    value=""
+  />
+</Component>
+`;
