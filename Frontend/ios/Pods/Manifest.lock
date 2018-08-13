@@ -68,7 +68,6 @@ DEPENDENCIES:
   - React/RCTAnimation (from `../node_modules/react-native`)
   - React/RCTNetwork (from `../node_modules/react-native`)
   - React/RCTText (from `../node_modules/react-native`)
-  - React/RCTWebSocket (from `../node_modules/react-native`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -104,6 +103,6 @@ SPEC CHECKSUMS:
   SSZipArchive: 51a800ebb77f95a8329b6ced1faaff394b47f509
   yoga: a23273df0088bf7f2bb7e5d7b00044ea57a2a54a
 
-PODFILE CHECKSUM: e0aac36a8e2c027f35fd7d5d4a527e93c1b84e7b
+PODFILE CHECKSUM: d35554b5a512f28a567d05cc5e38bf5eccf869a0
 
 COCOAPODS: 1.5.3
