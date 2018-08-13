@@ -4,10 +4,9 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule AccessibilityInfo
  * @flow
  */
-
 'use strict';
 
 const NativeModules = require('NativeModules');
@@ -34,30 +33,33 @@ const _subscriptions = new Map();
  */
 
 const AccessibilityInfo = {
+
   fetch: function(): Promise {
     return new Promise((resolve, reject) => {
-      RCTAccessibilityInfo.isTouchExplorationEnabled(function(resp) {
-        resolve(resp);
-      });
+      RCTAccessibilityInfo.isTouchExplorationEnabled(
+        function(resp) {
+          resolve(resp);
+        }
+      );
     });
   },
 
-  addEventListener: function(
+  addEventListener: function (
     eventName: ChangeEventName,
-    handler: Function,
+    handler: Function
   ): void {
     const listener = RCTDeviceEventEmitter.addListener(
       TOUCH_EXPLORATION_EVENT,
-      enabled => {
+      (enabled) => {
         handler(enabled);
-      },
+      }
     );
     _subscriptions.set(handler, listener);
   },
 
   removeEventListener: function(
     eventName: ChangeEventName,
-    handler: Function,
+    handler: Function
   ): void {
     const listener = _subscriptions.get(handler);
     if (!listener) {
@@ -66,6 +68,7 @@ const AccessibilityInfo = {
     listener.remove();
     _subscriptions.delete(handler);
   },
+
 };
 
 module.exports = AccessibilityInfo;

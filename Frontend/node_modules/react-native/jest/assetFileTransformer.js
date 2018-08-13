@@ -3,10 +3,7 @@
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
- *
- * @format
  */
-
 'use strict';
 
 /* eslint-env node */
@@ -21,10 +18,7 @@ module.exports = {
   // the Jest snapshot.
   process: (_, filename) =>
     `module.exports = {
-      testUri: 
-        ${JSON.stringify(
-          path.relative(__dirname, filename).replace(/\\/g, '/'),
-        )}
+      testUri: ${JSON.stringify(path.relative(__dirname, filename))}
     };`,
   getCacheKey: createCacheKeyFunction([__filename]),
 };

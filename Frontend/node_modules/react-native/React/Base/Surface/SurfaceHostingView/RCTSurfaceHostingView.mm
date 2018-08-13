@@ -33,17 +33,20 @@ RCT_NOT_IMPLEMENTED(- (nullable instancetype)initWithCoder:(NSCoder *)coder)
 - (instancetype)initWithBridge:(RCTBridge *)bridge
                     moduleName:(NSString *)moduleName
              initialProperties:(NSDictionary *)initialProperties
-               sizeMeasureMode:(RCTSurfaceSizeMeasureMode)sizeMeasureMode
 {
   RCTSurface *surface = [self createSurfaceWithBridge:bridge moduleName:moduleName initialProperties:initialProperties];
-  return [self initWithSurface:surface sizeMeasureMode:sizeMeasureMode];
+  return [self initWithSurface:surface];
+
 }
 
-- (instancetype)initWithSurface:(RCTSurface *)surface sizeMeasureMode:(RCTSurfaceSizeMeasureMode)sizeMeasureMode
+- (instancetype)initWithSurface:(RCTSurface *)surface
 {
   if (self = [super initWithFrame:CGRectZero]) {
     _surface = surface;
-    _sizeMeasureMode = sizeMeasureMode;
+
+    _sizeMeasureMode =
+      RCTSurfaceSizeMeasureModeWidthAtMost |
+      RCTSurfaceSizeMeasureModeHeightAtMost;
 
     _surface.delegate = self;
     _stage = surface.stage;

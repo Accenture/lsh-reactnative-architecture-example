@@ -98,13 +98,14 @@ public class CompositeReactPackage extends ReactInstancePackage
 
   /** {@inheritDoc} */
   @Override
-  public List<String> getViewManagerNames(ReactApplicationContext reactContext) {
+  public List<String> getViewManagerNames(
+      ReactApplicationContext reactContext, boolean loadClasses) {
     Set<String> uniqueNames = new HashSet<>();
     for (ReactPackage reactPackage : mChildReactPackages) {
       if (reactPackage instanceof ViewManagerOnDemandReactPackage) {
         List<String> names =
             ((ViewManagerOnDemandReactPackage) reactPackage)
-                .getViewManagerNames(reactContext);
+                .getViewManagerNames(reactContext, loadClasses);
         if (names != null) {
           uniqueNames.addAll(names);
         }
@@ -115,14 +116,15 @@ public class CompositeReactPackage extends ReactInstancePackage
 
   /** {@inheritDoc} */
   @Override
-  public @Nullable ViewManager createViewManager(ReactApplicationContext reactContext, String viewManagerName) {
+  public @Nullable ViewManager createViewManager(
+      ReactApplicationContext reactContext, String viewManagerName, boolean loadClasses) {
     ListIterator<ReactPackage> iterator = mChildReactPackages.listIterator(mChildReactPackages.size());
     while (iterator.hasPrevious()) {
       ReactPackage reactPackage = iterator.previous();
       if (reactPackage instanceof ViewManagerOnDemandReactPackage) {
         ViewManager viewManager =
             ((ViewManagerOnDemandReactPackage) reactPackage)
-                .createViewManager(reactContext, viewManagerName);
+                .createViewManager(reactContext, viewManagerName, loadClasses);
         if (viewManager != null) {
           return viewManager;
         }

@@ -4,23 +4,23 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule ARTSerializablePath
  */
-
 'use strict';
 
 // TODO: Move this into an ART mode called "serialized" or something
 
-const Class = require('art/core/class.js');
-const Path = require('art/core/path.js');
+var Class = require('art/core/class.js');
+var Path = require('art/core/path.js');
 
-const MOVE_TO = 0;
-const CLOSE = 1;
-const LINE_TO = 2;
-const CURVE_TO = 3;
-const ARC = 4;
+var MOVE_TO = 0;
+var CLOSE = 1;
+var LINE_TO = 2;
+var CURVE_TO = 3;
+var ARC = 4;
 
-const SerializablePath = Class(Path, {
+var SerializablePath = Class(Path, {
+
   initialize: function(path) {
     this.reset();
     if (path instanceof SerializablePath) {
@@ -55,18 +55,7 @@ const SerializablePath = Class(Path, {
   onArc: function(sx, sy, ex, ey, cx, cy, rx, ry, sa, ea, ccw, rotation) {
     if (rx !== ry || rotation) {
       return this._arcToBezier(
-        sx,
-        sy,
-        ex,
-        ey,
-        cx,
-        cy,
-        rx,
-        ry,
-        sa,
-        ea,
-        ccw,
-        rotation,
+        sx, sy, ex, ey, cx, cy, rx, ry, sa, ea, ccw, rotation
       );
     }
     this.path.push(ARC, cx, cy, rx, sa, ea, ccw ? 0 : 1);
@@ -78,7 +67,8 @@ const SerializablePath = Class(Path, {
 
   toJSON: function() {
     return this.path;
-  },
+  }
+
 });
 
 module.exports = SerializablePath;

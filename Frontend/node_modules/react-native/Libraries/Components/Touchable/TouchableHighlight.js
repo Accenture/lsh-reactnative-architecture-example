@@ -4,6 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
+ * @providesModule TouchableHighlight
  * @flow
  * @format
  */
@@ -25,9 +26,6 @@ const createReactClass = require('create-react-class');
 const ensurePositiveDelayProps = require('ensurePositiveDelayProps');
 
 import type {PressEvent} from 'CoreEventTypes';
-import type {Props as TouchableWithoutFeedbackProps} from 'TouchableWithoutFeedback';
-import type {ViewStyleProp} from 'StyleSheet';
-import type {ColorValue} from 'StyleSheetTypes';
 
 const DEFAULT_PROPS = {
   activeOpacity: 0.85,
@@ -36,23 +34,6 @@ const DEFAULT_PROPS = {
 };
 
 const PRESS_RETENTION_OFFSET = {top: 20, left: 20, right: 20, bottom: 30};
-
-type IOSProps = $ReadOnly<{|
-  hasTVPreferredFocus?: ?boolean,
-  tvParallaxProperties?: ?Object,
-|}>;
-
-type Props = $ReadOnly<{|
-  ...TouchableWithoutFeedbackProps,
-  ...IOSProps,
-
-  activeOpacity?: ?number,
-  underlayColor?: ?ColorValue,
-  style?: ?ViewStyleProp,
-  onShowUnderlay?: ?Function,
-  onHideUnderlay?: ?Function,
-  testOnly_pressed?: ?boolean,
-|}>;
 
 /**
  * A wrapper for making views respond properly to touches.
@@ -151,7 +132,7 @@ type Props = $ReadOnly<{|
  *
  */
 
-const TouchableHighlight = ((createReactClass({
+const TouchableHighlight = createReactClass({
   displayName: 'TouchableHighlight',
   propTypes: {
     ...TouchableWithoutFeedback.propTypes,
@@ -269,7 +250,7 @@ const TouchableHighlight = ((createReactClass({
 
   touchableHandlePress: function(e: PressEvent) {
     clearTimeout(this._hideTimeout);
-    if (!Platform.isTV) {
+    if (!Platform.isTVOS) {
       this._showUnderlay();
       this._hideTimeout = setTimeout(
         this._hideUnderlay,
@@ -382,6 +363,6 @@ const TouchableHighlight = ((createReactClass({
       </View>
     );
   },
-}): any): React.ComponentType<Props>);
+});
 
 module.exports = TouchableHighlight;

@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule Map
  * @preventMunge
  * @typechecks
  */
@@ -13,10 +13,10 @@
 
 'use strict';
 
-const _shouldPolyfillES6Collection = require('_shouldPolyfillES6Collection');
-const guid = require('guid');
-const isNode = require('fbjs/lib/isNode');
-const toIterator = require('toIterator');
+var _shouldPolyfillES6Collection = require('_shouldPolyfillES6Collection');
+var guid = require('guid');
+var isNode = require('fbjs/lib/isNode');
+var toIterator = require('toIterator');
 
 module.exports = (function(global, undefined) {
   // Since our implementation is spec-compliant for the most part we can safely
@@ -82,25 +82,26 @@ module.exports = (function(global, undefined) {
    */
 
   // Kinds of map iterations 23.1.5.3
-  const KIND_KEY = 'key';
-  const KIND_VALUE = 'value';
-  const KIND_KEY_VALUE = 'key+value';
+  var KIND_KEY = 'key';
+  var KIND_VALUE = 'value';
+  var KIND_KEY_VALUE = 'key+value';
 
   // In older browsers we can't create a null-prototype object so we have to
   // defend against key collisions with built-in methods.
-  const KEY_PREFIX = '$map_';
+  var KEY_PREFIX = '$map_';
 
   // This property will be used as the internal size variable to disallow
   // writing and to issue warnings for writings in development.
-  let SECRET_SIZE_PROP;
+  var SECRET_SIZE_PROP;
   if (__DEV__) {
     SECRET_SIZE_PROP = '$size' + guid();
   }
 
   // In oldIE we use the DOM Node `uniqueID` property to get create the hash.
-  const OLD_IE_HASH_PREFIX = 'IE_HASH_';
+  var OLD_IE_HASH_PREFIX = 'IE_HASH_';
 
   class Map {
+
     /**
      * 23.1.1.1
      * Takes an `iterable` which is basically any object that implements a
@@ -118,8 +119,8 @@ module.exports = (function(global, undefined) {
       initMap(this);
 
       if (iterable != null) {
-        const it = toIterator(iterable);
-        let next;
+        var it = toIterator(iterable);
+        var next;
         while (!(next = it.next()).done) {
           if (!isObject(next.value)) {
             throw new TypeError('Expected iterable items to be pair objects.');
@@ -145,7 +146,7 @@ module.exports = (function(global, undefined) {
      * @return {boolean}
      */
     has(key) {
-      const index = getIndex(this, key);
+      var index = getIndex(this, key);
       return !!(index != null && this._mapData[index]);
     }
 
@@ -158,12 +159,15 @@ module.exports = (function(global, undefined) {
      * @return {map}
      */
     set(key, value) {
-      let index = getIndex(this, key);
+      var index = getIndex(this, key);
 
       if (index != null && this._mapData[index]) {
         this._mapData[index][1] = value;
       } else {
-        index = this._mapData.push([key, value]) - 1;
+        index = this._mapData.push([
+          key,
+          value
+        ]) - 1;
         setIndex(this, key, index);
         if (__DEV__) {
           this[SECRET_SIZE_PROP] += 1;
@@ -183,13 +187,14 @@ module.exports = (function(global, undefined) {
      * @return {*}
      */
     get(key) {
-      const index = getIndex(this, key);
+      var index = getIndex(this, key);
       if (index == null) {
         return undefined;
       } else {
         return this._mapData[index][1];
       }
     }
+
 
     /**
      * 23.1.3.3
@@ -199,7 +204,7 @@ module.exports = (function(global, undefined) {
      * @return {boolean} Whether the key was found and deleted.
      */
     delete(key) {
-      const index = getIndex(this, key);
+      var index = getIndex(this, key);
       if (index != null && this._mapData[index]) {
         setIndex(this, key, undefined);
         this._mapData[index] = undefined;
@@ -259,14 +264,14 @@ module.exports = (function(global, undefined) {
         throw new TypeError('Callback must be callable.');
       }
 
-      const boundCallback = callback.bind(thisArg || undefined);
-      const mapData = this._mapData;
+      var boundCallback = callback.bind(thisArg || undefined);
+      var mapData = this._mapData;
 
       // Note that `mapData.length` should be computed on each iteration to
       // support iterating over new items in the map that were added after the
       // start of the iteration.
-      for (let i = 0; i < mapData.length; i++) {
-        const entry = mapData[i];
+      for (var i = 0; i < mapData.length; i++) {
+        var entry = mapData[i];
         if (entry != null) {
           boundCallback(entry[1], entry[0], this);
         }
@@ -278,6 +283,7 @@ module.exports = (function(global, undefined) {
   Map.prototype[toIterator.ITERATOR_SYMBOL] = Map.prototype.entries;
 
   class MapIterator {
+
     /**
      * 23.1.5.1
      * Create a `MapIterator` for a given `map`. While this class is private it
@@ -311,18 +317,18 @@ module.exports = (function(global, undefined) {
         throw new TypeError('Expected to be called on a MapIterator.');
       }
 
-      const map = this._map;
-      let index = this._nextIndex;
-      const kind = this._kind;
+      var map = this._map;
+      var index = this._nextIndex;
+      var kind = this._kind;
 
       if (map == null) {
         return createIterResultObject(undefined, true);
       }
 
-      const entries = map._mapData;
+      var entries = map._mapData;
 
       while (index < entries.length) {
-        const record = entries[index];
+        var record = entries[index];
 
         index += 1;
         this._nextIndex = index;
@@ -364,10 +370,10 @@ module.exports = (function(global, undefined) {
    */
   function getIndex(map, key) {
     if (isObject(key)) {
-      const hash = getHash(key);
+      var hash = getHash(key);
       return map._objectIndex[hash];
     } else {
-      const prefixedKey = KEY_PREFIX + key;
+      var prefixedKey = KEY_PREFIX + key;
       if (typeof key === 'string') {
         return map._stringIndex[prefixedKey];
       } else {
@@ -383,17 +389,17 @@ module.exports = (function(global, undefined) {
    * @param {*} key
    */
   function setIndex(map, key, index) {
-    const shouldDelete = index == null;
+    var shouldDelete = index == null;
 
     if (isObject(key)) {
-      const hash = getHash(key);
+      var hash = getHash(key);
       if (shouldDelete) {
         delete map._objectIndex[hash];
       } else {
         map._objectIndex[hash] = index;
       }
     } else {
-      const prefixedKey = KEY_PREFIX + key;
+      var prefixedKey = KEY_PREFIX + key;
       if (typeof key === 'string') {
         if (shouldDelete) {
           delete map._stringIndex[prefixedKey];
@@ -454,17 +460,17 @@ module.exports = (function(global, undefined) {
         } else {
           Object.defineProperty(map, SECRET_SIZE_PROP, {
             value: 0,
-            writable: true,
+            writable: true
           });
           Object.defineProperty(map, 'size', {
-            set: v => {
+            set: (v) => {
               console.error(
                 'PLEASE FIX ME: You are changing the map size property which ' +
-                  'should not be writable and will break in production.',
+                'should not be writable and will break in production.'
               );
               throw new Error('The map size property is not writable.');
             },
-            get: () => map[SECRET_SIZE_PROP],
+            get: () => map[SECRET_SIZE_PROP]
           });
         }
 
@@ -500,7 +506,7 @@ module.exports = (function(global, undefined) {
   }
 
   // Are we in a legit ES5 environment. Spoiler alert: that doesn't include IE8.
-  const isES5 = (function() {
+  var isES5 = (function() {
     try {
       Object.defineProperty({}, 'x', {});
       return true;
@@ -532,7 +538,7 @@ module.exports = (function(global, undefined) {
    * @return {?string}
    */
   function getIENodeHash(node) {
-    let uniqueID;
+    var uniqueID;
     switch (node.nodeType) {
       case 1: // Element
         uniqueID = node.uniqueID;
@@ -545,16 +551,16 @@ module.exports = (function(global, undefined) {
     }
 
     if (uniqueID) {
-      return OLD_IE_HASH_PREFIX + uniqueID;
+      return  OLD_IE_HASH_PREFIX + uniqueID;
     } else {
       return null;
     }
   }
 
-  const getHash = (function() {
-    const propIsEnumerable = Object.prototype.propertyIsEnumerable;
-    const hashProperty = guid();
-    let hashCounter = 0;
+  var getHash = (function() {
+    var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+    var hashProperty = guid();
+    var hashCounter = 0;
 
     /**
      * Get the "hash" associated with an object.
@@ -562,17 +568,16 @@ module.exports = (function(global, undefined) {
      * @param {object|array|function|regexp} o
      * @return {number}
      */
-    return function getHash(o) {
-      // eslint-disable-line no-shadow
+    return function getHash(o) { // eslint-disable-line no-shadow
       if (o[hashProperty]) {
         return o[hashProperty];
-      } else if (
-        !isES5 &&
-        o.propertyIsEnumerable &&
-        o.propertyIsEnumerable[hashProperty]
-      ) {
+      } else if (!isES5 &&
+                  o.propertyIsEnumerable &&
+                  o.propertyIsEnumerable[hashProperty]) {
         return o.propertyIsEnumerable[hashProperty];
-      } else if (!isES5 && isNode(o) && getIENodeHash(o)) {
+      } else if (!isES5 &&
+                  isNode(o) &&
+                  getIENodeHash(o)) {
         return getIENodeHash(o);
       } else if (!isES5 && o[hashProperty]) {
         return o[hashProperty];
@@ -585,7 +590,7 @@ module.exports = (function(global, undefined) {
             enumerable: false,
             writable: false,
             configurable: false,
-            value: hashCounter,
+            value: hashCounter
           });
         } else if (o.propertyIsEnumerable) {
           // Since we can't define a non-enumerable property on the object

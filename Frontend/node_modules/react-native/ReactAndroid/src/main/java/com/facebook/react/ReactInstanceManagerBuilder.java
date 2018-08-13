@@ -1,7 +1,4 @@
-// Copyright (c) 2004-present, Facebook, Inc.
-
-// This source code is licensed under the MIT license found in the
-// LICENSE file in the root directory of this source tree.
+// Copyright 2004-present Facebook. All Rights Reserved.
 
 package com.facebook.react;
 
@@ -10,7 +7,7 @@ import static com.facebook.react.modules.systeminfo.AndroidInfoHelpers.getFriend
 import android.app.Activity;
 import android.app.Application;
 import com.facebook.infer.annotation.Assertions;
-import com.facebook.react.bridge.JSIModulePackage;
+import com.facebook.react.bridge.JSIModulesProvider;
 import com.facebook.react.bridge.JSBundleLoader;
 import com.facebook.react.bridge.JSCJavaScriptExecutorFactory;
 import com.facebook.react.bridge.JavaScriptExecutorFactory;
@@ -47,11 +44,12 @@ public class ReactInstanceManagerBuilder {
   private @Nullable RedBoxHandler mRedBoxHandler;
   private boolean mLazyNativeModulesEnabled;
   private boolean mLazyViewManagersEnabled;
+  private boolean mDelayViewManagerClassLoadsEnabled;
   private @Nullable DevBundleDownloadListener mDevBundleDownloadListener;
   private @Nullable JavaScriptExecutorFactory mJavaScriptExecutorFactory;
   private int mMinNumShakes = 1;
   private int mMinTimeLeftInFrameForNonBatchedOperationMs = -1;
-  private @Nullable JSIModulePackage mJSIModulesPackage;
+  private @Nullable JSIModulesProvider mJSIModulesProvider;
 
   /* package protected */ ReactInstanceManagerBuilder() {
   }
@@ -66,9 +64,9 @@ public class ReactInstanceManagerBuilder {
     return this;
   }
 
-  public ReactInstanceManagerBuilder setJSIModulesPackage(
-    @Nullable JSIModulePackage jsiModulePackage) {
-    mJSIModulesPackage = jsiModulePackage;
+  public ReactInstanceManagerBuilder setJSIModulesProvider(
+    @Nullable JSIModulesProvider jsiModulesProvider) {
+    mJSIModulesProvider = jsiModulesProvider;
     return this;
   }
 
@@ -211,6 +209,12 @@ public class ReactInstanceManagerBuilder {
     return this;
   }
 
+  public ReactInstanceManagerBuilder setDelayViewManagerClassLoadsEnabled(
+      boolean delayViewManagerClassLoadsEnabled) {
+    mDelayViewManagerClassLoadsEnabled = delayViewManagerClassLoadsEnabled;
+    return this;
+  }
+
   public ReactInstanceManagerBuilder setDevBundleDownloadListener(
     @Nullable DevBundleDownloadListener listener) {
     mDevBundleDownloadListener = listener;
@@ -281,9 +285,10 @@ public class ReactInstanceManagerBuilder {
         mRedBoxHandler,
         mLazyNativeModulesEnabled,
         mLazyViewManagersEnabled,
+        mDelayViewManagerClassLoadsEnabled,
         mDevBundleDownloadListener,
         mMinNumShakes,
         mMinTimeLeftInFrameForNonBatchedOperationMs,
-      mJSIModulesPackage);
+      mJSIModulesProvider);
   }
 }

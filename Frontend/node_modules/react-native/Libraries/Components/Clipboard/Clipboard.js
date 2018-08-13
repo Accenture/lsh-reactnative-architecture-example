@@ -4,10 +4,9 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule Clipboard
  * @flow
  */
-
 'use strict';
 
 const Clipboard = require('NativeModules').Clipboard;
@@ -38,5 +37,5 @@ module.exports = {
    */
   setString(content: string) {
     Clipboard.setString(content);
-  },
+  }
 };

@@ -4,10 +4,9 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule Geolocation
  * @flow
  */
-
 'use strict';
 
 const NativeEventEmitter = require('NativeEventEmitter');
@@ -25,20 +24,20 @@ const LocationEventEmitter = new NativeEventEmitter(RCTLocationObserver);
 const Platform = require('Platform');
 const PermissionsAndroid = require('PermissionsAndroid');
 
-let subscriptions = [];
-let updatesEnabled = false;
+var subscriptions = [];
+var updatesEnabled = false;
 
 type GeoConfiguration = {
-  skipPermissionRequests: boolean,
-};
+  skipPermissionRequests: bool;
+}
 
 type GeoOptions = {
   timeout?: number,
   maximumAge?: number,
-  enableHighAccuracy?: boolean,
+  enableHighAccuracy?: bool,
   distanceFilter: number,
-  useSignificantChanges?: boolean,
-};
+  useSignificantChanges?: bool,
+}
 
 /**
  * The Geolocation API extends the web spec:
@@ -46,14 +45,17 @@ type GeoOptions = {
  *
  * See https://facebook.github.io/react-native/docs/geolocation.html
  */
-const Geolocation = {
+var Geolocation = {
+
   /*
     * Sets configuration options that will be used in all location requests.
     *
     * See https://facebook.github.io/react-native/docs/geolocation.html#setrnconfiguration
     *
     */
-  setRNConfiguration: function(config: GeoConfiguration) {
+  setRNConfiguration: function(
+    config: GeoConfiguration
+  ) {
     if (RCTLocationObserver.setConfiguration) {
       RCTLocationObserver.setConfiguration(config);
     }
@@ -76,11 +78,11 @@ const Geolocation = {
   getCurrentPosition: async function(
     geo_success: Function,
     geo_error?: Function,
-    geo_options?: GeoOptions,
+    geo_options?: GeoOptions
   ) {
     invariant(
       typeof geo_success === 'function',
-      'Must provide a valid geo_success callback.',
+      'Must provide a valid geo_success callback.'
     );
     let hasPermission = true;
     // Supports Android's new permission model. For Android older devices,
@@ -110,27 +112,27 @@ const Geolocation = {
    *
    * See https://facebook.github.io/react-native/docs/geolocation.html#watchposition
    */
-  watchPosition: function(
-    success: Function,
-    error?: Function,
-    options?: GeoOptions,
-  ): number {
+  watchPosition: function(success: Function, error?: Function, options?: GeoOptions): number {
     if (!updatesEnabled) {
       RCTLocationObserver.startObserving(options || {});
       updatesEnabled = true;
     }
-    const watchID = subscriptions.length;
+    var watchID = subscriptions.length;
     subscriptions.push([
-      LocationEventEmitter.addListener('geolocationDidChange', success),
-      error
-        ? LocationEventEmitter.addListener('geolocationError', error)
-        : null,
+      LocationEventEmitter.addListener(
+        'geolocationDidChange',
+        success
+      ),
+      error ? LocationEventEmitter.addListener(
+        'geolocationError',
+        error
+      ) : null,
     ]);
     return watchID;
   },
 
   clearWatch: function(watchID: number) {
-    const sub = subscriptions[watchID];
+    var sub = subscriptions[watchID];
     if (!sub) {
       // Silently exit when the watchID is invalid or already cleared
       // This is consistent with timers
@@ -139,11 +141,10 @@ const Geolocation = {
 
     sub[0].remove();
     // array element refinements not yet enabled in Flow
-    const sub1 = sub[1];
-    sub1 && sub1.remove();
+    var sub1 = sub[1]; sub1 && sub1.remove();
     subscriptions[watchID] = undefined;
-    let noWatchers = true;
-    for (let ii = 0; ii < subscriptions.length; ii++) {
+    var noWatchers = true;
+    for (var ii = 0; ii < subscriptions.length; ii++) {
       if (subscriptions[ii]) {
         noWatchers = false; // still valid subscriptions
       }
@@ -157,19 +158,18 @@ const Geolocation = {
     if (updatesEnabled) {
       RCTLocationObserver.stopObserving();
       updatesEnabled = false;
-      for (let ii = 0; ii < subscriptions.length; ii++) {
-        const sub = subscriptions[ii];
+      for (var ii = 0; ii < subscriptions.length; ii++) {
+        var sub = subscriptions[ii];
         if (sub) {
           warning(false, 'Called stopObserving with existing subscriptions.');
           sub[0].remove();
           // array element refinements not yet enabled in Flow
-          const sub1 = sub[1];
-          sub1 && sub1.remove();
+          var sub1 = sub[1]; sub1 && sub1.remove();
         }
       }
       subscriptions = [];
     }
-  },
+  }
 };
 
 module.exports = Geolocation;

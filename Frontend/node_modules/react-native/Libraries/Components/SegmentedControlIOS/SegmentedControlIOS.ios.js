@@ -4,15 +4,13 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule SegmentedControlIOS
  * @flow
  */
-
 'use strict';
 
 const NativeMethodsMixin = require('NativeMethodsMixin');
 const React = require('React');
-const ReactNative = require('ReactNative');
 const PropTypes = require('prop-types');
 const StyleSheet = require('StyleSheet');
 const ViewPropTypes = require('ViewPropTypes');
@@ -20,25 +18,10 @@ const ViewPropTypes = require('ViewPropTypes');
 const createReactClass = require('create-react-class');
 const requireNativeComponent = require('requireNativeComponent');
 
-import type {ViewProps} from 'ViewPropTypes';
-
-const RCTSegmentedControl = requireNativeComponent('RCTSegmentedControl');
-
 type DefaultProps = {
-  values: $ReadOnlyArray<string>,
+  values: Array<string>,
   enabled: boolean,
 };
-
-type Props = $ReadOnly<{|
-  ...ViewProps,
-  values?: ?$ReadOnlyArray<string>,
-  selectedIndex?: ?number,
-  onValueChange?: ?Function,
-  onChange?: ?Function,
-  enabled?: ?boolean,
-  tintColor?: ?string,
-  momentary?: ?boolean,
-|}>;
 
 const SEGMENTED_CONTROL_REFERENCE = 'segmentedcontrol';
 
@@ -107,20 +90,19 @@ const SegmentedControlIOS = createReactClass({
      * If true, then selecting a segment won't persist visually.
      * The `onValueChange` callback will still work as expected.
      */
-    momentary: PropTypes.bool,
+    momentary: PropTypes.bool
   },
 
   getDefaultProps: function(): DefaultProps {
     return {
       values: [],
-      enabled: true,
+      enabled: true
     };
   },
 
   _onChange: function(event: Event) {
     this.props.onChange && this.props.onChange(event);
-    this.props.onValueChange &&
-      this.props.onValueChange(event.nativeEvent.value);
+    this.props.onValueChange && this.props.onValueChange(event.nativeEvent.value);
   },
 
   render: function() {
@@ -132,7 +114,7 @@ const SegmentedControlIOS = createReactClass({
         onChange={this._onChange}
       />
     );
-  },
+  }
 });
 
 const styles = StyleSheet.create({
@@ -141,6 +123,9 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = ((SegmentedControlIOS: any): Class<
-  ReactNative.NativeComponent<Props>,
->);
+const RCTSegmentedControl = requireNativeComponent(
+  'RCTSegmentedControl',
+  SegmentedControlIOS
+);
+
+module.exports = SegmentedControlIOS;

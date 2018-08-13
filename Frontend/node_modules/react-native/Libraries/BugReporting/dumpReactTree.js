@@ -4,10 +4,9 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule dumpReactTree
  * @flow
  */
-
 'use strict';
 
 /*
@@ -37,7 +36,7 @@ function getReactTree() {
     'React tree dumps have been temporarily disabled while React is ' +
     'upgraded to Fiber.'
   );
-  /*
+/*
   let output = '';
   const rootIds = Object.getOwnPropertyNames(ReactNativeMount._instancesByContainerID);
   for (const rootId of rootIds) {
@@ -51,14 +50,14 @@ function getReactTree() {
 }
 
 /*
-function dumpNode(node: Object, indentation: number) {
+function dumpNode(node: Object, identation: number) {
   const data = getReactData(node);
   if (data.nodeType === 'Text') {
-    return indent(indentation) + data.text + '\n';
+    return indent(identation) + data.text + '\n';
   } else if (data.nodeType === 'Empty') {
     return '';
   }
-  let output = indent(indentation) + `<${data.name}`;
+  let output = indent(identation) + `<${data.name}`;
   if (data.nodeType === 'Composite') {
     for (const propName of Object.getOwnPropertyNames(data.props || {})) {
       if (isNormalProp(propName)) {
@@ -76,11 +75,11 @@ function dumpNode(node: Object, indentation: number) {
   }
   let childOutput = '';
   for (const child of data.children || []) {
-    childOutput += dumpNode(child, indentation + 1);
+    childOutput += dumpNode(child, identation + 1);
   }
 
   if (childOutput) {
-    output += '>\n' + childOutput + indent(indentation) + `</${data.name}>\n`;
+    output += '>\n' + childOutput + indent(identation) + `</${data.name}>\n`;
   } else {
     output += ' />\n';
   }

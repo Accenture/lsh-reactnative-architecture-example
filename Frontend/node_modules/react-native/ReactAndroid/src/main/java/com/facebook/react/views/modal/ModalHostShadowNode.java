@@ -28,7 +28,7 @@ class ModalHostShadowNode extends LayoutShadowNode {
   }
 
   @Override
-  protected ModalHostShadowNode copy() {
+  public ModalHostShadowNode mutableCopy() {
     return new ModalHostShadowNode(this);
   }
 

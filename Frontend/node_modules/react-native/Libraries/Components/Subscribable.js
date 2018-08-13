@@ -4,10 +4,9 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule Subscribable
  * @flow
  */
-
 'use strict';
 
 import type EventEmitter from 'EventEmitter';
@@ -23,6 +22,7 @@ import type EventEmitter from 'EventEmitter';
 const Subscribable = {};
 
 Subscribable.Mixin = {
+
   UNSAFE_componentWillMount: function() {
     this._subscribableSubscriptions = [];
   },
@@ -30,10 +30,9 @@ Subscribable.Mixin = {
   componentWillUnmount: function() {
     // This null check is a fix for a broken version of uglify-es. Should be deleted eventually
     // https://github.com/facebook/react-native/issues/17348
-    this._subscribableSubscriptions &&
-      this._subscribableSubscriptions.forEach(subscription =>
-        subscription.remove(),
-      );
+    this._subscribableSubscriptions && this._subscribableSubscriptions.forEach(
+      (subscription) => subscription.remove()
+    );
     this._subscribableSubscriptions = null;
   },
 
@@ -54,12 +53,12 @@ Subscribable.Mixin = {
     eventEmitter: EventEmitter,
     eventType: string,
     listener: Function,
-    context: Object,
+    context: Object
   ) {
     this._subscribableSubscriptions.push(
-      eventEmitter.addListener(eventType, listener, context),
+      eventEmitter.addListener(eventType, listener, context)
     );
-  },
+  }
 };
 
 module.exports = Subscribable;

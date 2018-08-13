@@ -4,26 +4,25 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule ElementBox
  * @flow
  */
-
 'use strict';
 
-const React = require('React');
-const View = require('View');
-const StyleSheet = require('StyleSheet');
-const BorderBox = require('BorderBox');
-const resolveBoxStyle = require('resolveBoxStyle');
+var React = require('React');
+var View = require('View');
+var StyleSheet = require('StyleSheet');
+var BorderBox = require('BorderBox');
+var resolveBoxStyle = require('resolveBoxStyle');
 
-const flattenStyle = require('flattenStyle');
+var flattenStyle = require('flattenStyle');
 
 class ElementBox extends React.Component<$FlowFixMeProps> {
   render() {
-    const style = flattenStyle(this.props.style) || {};
-    const margin = resolveBoxStyle('margin', style);
-    const padding = resolveBoxStyle('padding', style);
-    let frameStyle = this.props.frame;
+    var style = flattenStyle(this.props.style) || {};
+    var margin = resolveBoxStyle('margin', style);
+    var padding = resolveBoxStyle('padding', style);
+    var frameStyle = this.props.frame;
     if (margin) {
       frameStyle = {
         top: frameStyle.top - margin.top,
@@ -32,7 +31,7 @@ class ElementBox extends React.Component<$FlowFixMeProps> {
         width: frameStyle.width + margin.left + margin.right,
       };
     }
-    let contentStyle = {
+    var contentStyle = {
       width: this.props.frame.width,
       height: this.props.frame.height,
     };
@@ -54,7 +53,7 @@ class ElementBox extends React.Component<$FlowFixMeProps> {
   }
 }
 
-const styles = StyleSheet.create({
+var styles = StyleSheet.create({
   frame: {
     position: 'absolute',
   },
@@ -70,3 +69,4 @@ const styles = StyleSheet.create({
 });
 
 module.exports = ElementBox;
+

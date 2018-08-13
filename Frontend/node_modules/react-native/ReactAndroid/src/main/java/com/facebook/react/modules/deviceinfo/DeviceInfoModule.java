@@ -13,10 +13,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.content.Context;
+import android.util.DisplayMetrics;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.BaseJavaModule;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
@@ -24,11 +27,9 @@ import com.facebook.react.uimanager.DisplayMetricsHolder;
 /**
  * Module that exposes Android Constants to JS.
  */
-@ReactModule(name = DeviceInfoModule.sModuleName)
+@ReactModule(name = "DeviceInfo")
 public class DeviceInfoModule extends BaseJavaModule implements
     LifecycleEventListener {
-
-  static final String sModuleName = "DeviceInfo";
 
   private @Nullable ReactApplicationContext mReactApplicationContext;
   private float mFontScale;
@@ -47,7 +48,7 @@ public class DeviceInfoModule extends BaseJavaModule implements
 
   @Override
   public String getName() {
-    return sModuleName;
+    return "DeviceInfo";
   }
 
   @Override
@@ -87,6 +88,6 @@ public class DeviceInfoModule extends BaseJavaModule implements
 
     mReactApplicationContext
         .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-        .emit("didUpdateDimensions", DisplayMetricsHolder.getDisplayMetricsNativeMap(mFontScale));
+        .emit("didUpdateDimensions", DisplayMetricsHolder.getDisplayMetricsMap(mFontScale));
   }
 }

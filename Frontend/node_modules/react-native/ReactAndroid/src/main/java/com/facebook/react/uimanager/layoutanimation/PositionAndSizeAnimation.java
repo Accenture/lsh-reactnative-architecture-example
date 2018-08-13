@@ -1,7 +1,4 @@
-// Copyright (c) 2004-present, Facebook, Inc.
-
-// This source code is licensed under the MIT license found in the
-// LICENSE file in the root directory of this source tree.
+// Copyright 2004-present Facebook. All Rights Reserved.
 
 package com.facebook.react.uimanager.layoutanimation;
 
@@ -15,15 +12,24 @@ import android.view.animation.Transformation;
  * layout passes occurring on every frame.
  * What we might want to try to do instead is use a combined ScaleAnimation and TranslateAnimation.
  */
-/* package */ class PositionAndSizeAnimation extends Animation implements LayoutHandlingAnimation {
+/* package */ class PositionAndSizeAnimation extends Animation implements HandleLayout {
 
   private final View mView;
-  private float mStartX, mStartY, mDeltaX, mDeltaY;
-  private int mStartWidth, mStartHeight, mDeltaWidth, mDeltaHeight;
+  private final float mStartX, mStartY, mDeltaX, mDeltaY;
+  private final int mStartWidth, mStartHeight, mDeltaWidth, mDeltaHeight;
 
   public PositionAndSizeAnimation(View view, int x, int y, int width, int height) {
     mView = view;
-    calculateAnimation(x, y, width, height);
+
+    mStartX = view.getX() - view.getTranslationX();
+    mStartY = view.getY() - view.getTranslationY();
+    mStartWidth = view.getWidth();
+    mStartHeight = view.getHeight();
+
+    mDeltaX = x - mStartX;
+    mDeltaY = y - mStartY;
+    mDeltaWidth = width - mStartWidth;
+    mDeltaHeight = height - mStartHeight;
   }
 
   @Override
@@ -40,26 +46,7 @@ import android.view.animation.Transformation;
   }
 
   @Override
-  public void onLayoutUpdate(int x, int y, int width, int height) {
-    // Layout changed during the animation, we should update our values so that the final layout
-    // is correct.
-    calculateAnimation(x, y, width, height);
-  }
-
-  @Override
   public boolean willChangeBounds() {
     return true;
-  }
-
-  private void calculateAnimation(int x, int y, int width, int height) {
-    mStartX = mView.getX() - mView.getTranslationX();
-    mStartY = mView.getY() - mView.getTranslationY();
-    mStartWidth = mView.getWidth();
-    mStartHeight = mView.getHeight();
-
-    mDeltaX = x - mStartX;
-    mDeltaY = y - mStartY;
-    mDeltaWidth = width - mStartWidth;
-    mDeltaHeight = height - mStartHeight;
   }
 }

@@ -31,8 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
  * Instanciates a view with given Surface object.
  * Note: The view retains the surface object.
  */
-- (instancetype)initWithSurface:(RCTSurface *)surface
-                sizeMeasureMode:(RCTSurfaceSizeMeasureMode)sizeMeasureMode NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithSurface:(RCTSurface *)surface NS_DESIGNATED_INITIALIZER;
 
 /**
  * Convenience initializer.
@@ -41,8 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (instancetype)initWithBridge:(RCTBridge *)bridge
                     moduleName:(NSString *)moduleName
-             initialProperties:(NSDictionary *)initialProperties
-               sizeMeasureMode:(RCTSurfaceSizeMeasureMode)sizeMeasureMode;
+             initialProperties:(NSDictionary *)initialProperties;
 
 /**
  * Create an instance of RCTSurface to be hosted.

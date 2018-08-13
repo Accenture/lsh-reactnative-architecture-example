@@ -443,11 +443,6 @@ static inline void RCTApplyTransformationAccordingLayoutDirection(UIView *view, 
 #if !TARGET_OS_TV
   if ([view isKindOfClass:[RCTRefreshControl class]]) {
     [_scrollView setRctRefreshControl:(RCTRefreshControl *)view];
-  }
-  else if ([view conformsToProtocol:@protocol(UIScrollViewDelegate)]) {
-    [self addScrollListener:(UIView<UIScrollViewDelegate> *)view];
-    [_scrollView addSubview:view];
-    [_scrollView sendSubviewToBack:view];
   } else
 #endif
   {
@@ -464,9 +459,6 @@ static inline void RCTApplyTransformationAccordingLayoutDirection(UIView *view, 
 #if !TARGET_OS_TV
   if ([subview isKindOfClass:[RCTRefreshControl class]]) {
     [_scrollView setRctRefreshControl:nil];
-  } else if ([subview conformsToProtocol:@protocol(UIScrollViewDelegate)]) {
-    [self removeScrollListener:(UIView<UIScrollViewDelegate> *)subview];
-    [subview removeFromSuperview];
   } else
 #endif
   {

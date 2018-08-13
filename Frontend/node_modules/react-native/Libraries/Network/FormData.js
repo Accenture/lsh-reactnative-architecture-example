@@ -4,27 +4,24 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule FormData
  * @flow
  */
-
 'use strict';
 
 type FormDataValue = any;
 type FormDataNameValuePair = [string, FormDataValue];
 
 type Headers = {[name: string]: string};
-type FormDataPart =
-  | {
-      string: string,
-      headers: Headers,
-    }
-  | {
-      uri: string,
-      headers: Headers,
-      name?: string,
-      type?: string,
-    };
+type FormDataPart = {
+  string: string,
+  headers: Headers,
+} | {
+  uri: string,
+  headers: Headers,
+  name?: string,
+  type?: string,
+};
 
 /**
  * Polyfill for XMLHttpRequest2 FormData API, allowing multipart POST requests
@@ -64,9 +61,9 @@ class FormData {
 
   getParts(): Array<FormDataPart> {
     return this._parts.map(([name, value]) => {
-      const contentDisposition = 'form-data; name="' + name + '"';
+      var contentDisposition = 'form-data; name="' + name + '"';
 
-      const headers: Headers = {'content-disposition': contentDisposition};
+      var headers: Headers = {'content-disposition': contentDisposition};
 
       // The body part is a "blob", which in React Native just means
       // an object with a `uri` attribute. Optionally, it can also

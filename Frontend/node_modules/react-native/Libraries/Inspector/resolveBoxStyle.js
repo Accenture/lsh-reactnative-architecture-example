@@ -4,10 +4,9 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule resolveBoxStyle
  * @flow
  */
-
 'use strict';
 
 /**
@@ -20,9 +19,9 @@
  * If none are set, returns false.
  */
 function resolveBoxStyle(prefix: string, style: Object): ?Object {
-  const res = {};
-  const subs = ['top', 'left', 'bottom', 'right'];
-  let set = false;
+  var res = {};
+  var subs = ['top', 'left', 'bottom', 'right'];
+  var set = false;
   subs.forEach(sub => {
     res[sub] = style[prefix] || 0;
   });
@@ -38,7 +37,7 @@ function resolveBoxStyle(prefix: string, style: Object): ?Object {
     set = true;
   }
   subs.forEach(sub => {
-    const val = style[prefix + capFirst(sub)];
+    var val = style[prefix + capFirst(sub)];
     if (val) {
       res[sub] = val;
       set = true;
@@ -55,3 +54,4 @@ function capFirst(text) {
 }
 
 module.exports = resolveBoxStyle;
+

@@ -41,7 +41,6 @@ public class FrescoBasedReactTextInlineImageShadowNode extends ReactTextInlineIm
   private final @Nullable Object mCallerContext;
   private float mWidth = YogaConstants.UNDEFINED;
   private float mHeight = YogaConstants.UNDEFINED;
-  private int mTintColor = 0;
 
   public FrescoBasedReactTextInlineImageShadowNode(
     AbstractDraweeControllerBuilder draweeControllerBuilder,
@@ -55,14 +54,13 @@ public class FrescoBasedReactTextInlineImageShadowNode extends ReactTextInlineIm
     mHeaders = node.mHeaders; // mHeaders is immutable
     mWidth = node.mWidth;
     mHeight = node.mHeight;
-    mTintColor = node.mTintColor;
     mDraweeControllerBuilder = node.mDraweeControllerBuilder;
     mCallerContext = node.mCallerContext;
     mUri = node.mUri;
   }
 
   @Override
-  protected FrescoBasedReactTextInlineImageShadowNode copy() {
+  public FrescoBasedReactTextInlineImageShadowNode mutableCopy() {
     return new FrescoBasedReactTextInlineImageShadowNode(this);
   }
 
@@ -96,11 +94,6 @@ public class FrescoBasedReactTextInlineImageShadowNode extends ReactTextInlineIm
     mHeaders = headers;
   }
 
-  @ReactProp(name = "tintColor")
-  public void setTintColor(int tintColor) {
-    mTintColor = tintColor;
-  }
-
   /**
    * Besides width/height, all other layout props on inline images are ignored
    */
@@ -123,7 +116,7 @@ public class FrescoBasedReactTextInlineImageShadowNode extends ReactTextInlineIm
           "Inline images must not have percentage based height");
     }
   }
-  
+
   public @Nullable Uri getUri() {
     return mUri;
   }
@@ -162,7 +155,6 @@ public class FrescoBasedReactTextInlineImageShadowNode extends ReactTextInlineIm
       resources,
       height,
       width,
-      mTintColor,
       getUri(),
       getHeaders(),
       getDraweeControllerBuilder(),

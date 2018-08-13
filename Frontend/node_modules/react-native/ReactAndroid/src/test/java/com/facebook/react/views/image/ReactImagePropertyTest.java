@@ -20,7 +20,6 @@ import com.facebook.react.bridge.JavaOnlyMap;
 import com.facebook.react.uimanager.ReactStylesDiffMap;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.soloader.SoLoader;
 
 import org.junit.After;
 import org.junit.Before;
@@ -54,7 +53,6 @@ public class ReactImagePropertyTest {
 
   @Before
   public void setup() {
-    SoLoader.setInTestMode();
     mContext = new ReactApplicationContext(RuntimeEnvironment.application);
     mCatalystInstanceMock = ReactTestHelper.createMockCatalystInstance();
     mContext.initializeWithInstance(mCatalystInstanceMock);

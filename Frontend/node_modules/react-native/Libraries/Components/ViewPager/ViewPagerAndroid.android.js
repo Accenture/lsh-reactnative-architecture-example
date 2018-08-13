@@ -4,10 +4,9 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule ViewPagerAndroid
  * @flow
  */
-
 'use strict';
 
 const React = require('React');
@@ -18,8 +17,6 @@ const ViewPropTypes = require('ViewPropTypes');
 
 const dismissKeyboard = require('dismissKeyboard');
 const requireNativeComponent = require('requireNativeComponent');
-
-const NativeAndroidViewPager = requireNativeComponent('AndroidViewPager');
 
 const VIEWPAGER_REF = 'viewPager';
 
@@ -136,16 +133,16 @@ class ViewPagerAndroid extends React.Component<{
     ]),
 
     /**
-     * When false, the content does not scroll.
-     * The default value is true.
-     */
+    * When false, the content does not scroll.
+    * The default value is true.
+    */
     scrollEnabled: PropTypes.bool,
 
     /**
      * Whether enable showing peekFraction or not. If this is true, the preview of
      * last and next page will show in current screen. Defaults to false.
      */
-    peekEnabled: PropTypes.bool,
+     peekEnabled: PropTypes.bool,
   };
 
   componentDidMount() {
@@ -168,30 +165,22 @@ class ViewPagerAndroid extends React.Component<{
       }
       const newProps = {
         ...child.props,
-        style: [
-          child.props.style,
-          {
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            right: 0,
-            bottom: 0,
-            width: undefined,
-            height: undefined,
-          },
-        ],
+        style: [child.props.style, {
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          right: 0,
+          bottom: 0,
+          width: undefined,
+          height: undefined,
+        }],
         collapsable: false,
       };
-      if (
-        child.type &&
-        child.type.displayName &&
-        child.type.displayName !== 'RCTView' &&
-        child.type.displayName !== 'View'
-      ) {
-        console.warn(
-          'Each ViewPager child must be a <View>. Was ' +
-            child.type.displayName,
-        );
+      if (child.type &&
+          child.type.displayName &&
+          (child.type.displayName !== 'RCTView') &&
+          (child.type.displayName !== 'View')) {
+        console.warn('Each ViewPager child must be a <View>. Was ' + child.type.displayName);
       }
       return React.createElement(child.type, newProps);
     });
@@ -256,5 +245,7 @@ class ViewPagerAndroid extends React.Component<{
     );
   }
 }
+
+const NativeAndroidViewPager = requireNativeComponent('AndroidViewPager', ViewPagerAndroid);
 
 module.exports = ViewPagerAndroid;

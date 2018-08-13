@@ -20,11 +20,5 @@ import com.facebook.proguard.annotations.DoNotStrip;
     super(initHybrid(jscConfig));
   }
 
-  @Override
-  public String getName() {
-    return "JSCJavaScriptExecutor";
-  }
-
-
   private native static HybridData initHybrid(ReadableNativeMap jscConfig);
 }

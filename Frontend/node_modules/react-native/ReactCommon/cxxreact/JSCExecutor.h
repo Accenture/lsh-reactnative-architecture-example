@@ -1,7 +1,4 @@
-// Copyright (c) 2004-present, Facebook, Inc.
-
-// This source code is licensed under the MIT license found in the
-// LICENSE file in the root directory of this source tree.
+// Copyright 2004-present Facebook. All Rights Reserved.
 
 #pragma once
 
@@ -30,14 +27,15 @@ class RAMBundleRegistry;
 
 class RN_EXPORT JSCExecutorFactory : public JSExecutorFactory {
 public:
-  JSCExecutorFactory(const folly::dynamic& jscConfig) :
-    m_jscConfig(jscConfig) {}
+  JSCExecutorFactory(const folly::dynamic& jscConfig, std::function<folly::dynamic(const std::string &)> provider) :
+    m_jscConfig(jscConfig), m_nativeExtensionsProvider(provider) {}
   std::unique_ptr<JSExecutor> createJSExecutor(
     std::shared_ptr<ExecutorDelegate> delegate,
     std::shared_ptr<MessageQueueThread> jsQueue) override;
 private:
   std::string m_cacheDir;
   folly::dynamic m_jscConfig;
+  std::function<folly::dynamic(const std::string &)> m_nativeExtensionsProvider;
 };
 
 template<typename T>
@@ -61,7 +59,8 @@ public:
    */
   explicit JSCExecutor(std::shared_ptr<ExecutorDelegate> delegate,
                        std::shared_ptr<MessageQueueThread> messageQueueThread,
-                       const folly::dynamic& jscConfig) throw(JSException);
+                       const folly::dynamic& jscConfig,
+                       std::function<folly::dynamic(const std::string &)> nativeExtensionsProvider) throw(JSException);
   ~JSCExecutor() override;
 
   virtual void loadApplicationScript(
@@ -90,7 +89,9 @@ public:
 
   virtual bool isInspectable() override;
 
+#ifdef WITH_JSC_MEMORY_PRESSURE
   virtual void handleMemoryPressure(int pressureLevel) override;
+#endif
 
   virtual void destroy() override;
 
@@ -105,6 +106,7 @@ private:
   JSCNativeModules m_nativeModules;
   folly::dynamic m_jscConfig;
   std::once_flag m_bindFlag;
+  std::function<folly::dynamic(const std::string &)> m_nativeExtensionsProvider;
 
   folly::Optional<Object> m_invokeCallbackAndReturnFlushedQueueJS;
   folly::Optional<Object> m_callFunctionReturnFlushedQueueJS;
@@ -126,6 +128,7 @@ private:
   void installNativeHook(const char* name);
 
   JSValueRef getNativeModule(JSObjectRef object, JSStringRef propertyName);
+  JSValueRef getNativeExtension(JSObjectRef object, JSStringRef propertyName);
 
   JSValueRef nativeRequire(
       size_t argumentCount,

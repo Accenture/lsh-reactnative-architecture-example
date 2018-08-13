@@ -4,10 +4,9 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule TaskQueue
  * @flow
  */
-
 'use strict';
 
 const infoLog = require('infoLog');
@@ -64,17 +63,17 @@ class TaskQueue {
   }
 
   enqueueTasks(tasks: Array<Task>): void {
-    tasks.forEach(task => this.enqueue(task));
+    tasks.forEach((task) => this.enqueue(task));
   }
 
   cancelTasks(tasksToCancel: Array<Task>): void {
     // search through all tasks and remove them.
     this._queueStack = this._queueStack
-      .map(queue => ({
+      .map((queue) => ({
         ...queue,
-        tasks: queue.tasks.filter(task => tasksToCancel.indexOf(task) === -1),
+        tasks: queue.tasks.filter((task) => tasksToCancel.indexOf(task) === -1),
       }))
-      .filter((queue, idx) => queue.tasks.length > 0 || idx === 0);
+      .filter((queue, idx) => (queue.tasks.length > 0 || idx === 0));
   }
 
   /**
@@ -87,7 +86,7 @@ class TaskQueue {
    * `onMoreTasks` will be called after each `PromiseTask` resolves if there are
    * tasks ready to run at that point.
    */
-  hasTasksToProcess(): boolean {
+  hasTasksToProcess(): bool {
     return this._getCurrentQueue().length > 0;
   }
 
@@ -109,36 +108,30 @@ class TaskQueue {
           invariant(
             typeof task === 'function',
             'Expected Function, SimpleTask, or PromiseTask, but got:\n' +
-              JSON.stringify(task, null, 2),
+              JSON.stringify(task, null, 2)
           );
           DEBUG && infoLog('run anonymous task');
           task();
         }
       } catch (e) {
-        e.message =
-          'TaskQueue: Error with task ' + (task.name || '') + ': ' + e.message;
+        e.message = 'TaskQueue: Error with task ' + (task.name || '') + ': ' +
+          e.message;
         throw e;
       }
     }
   }
 
-  _queueStack: Array<{tasks: Array<Task>, popable: boolean}>;
+  _queueStack: Array<{tasks: Array<Task>, popable: bool}>;
   _onMoreTasks: () => void;
 
   _getCurrentQueue(): Array<Task> {
     const stackIdx = this._queueStack.length - 1;
     const queue = this._queueStack[stackIdx];
-    if (
-      queue.popable &&
-      queue.tasks.length === 0 &&
-      this._queueStack.length > 1
-    ) {
+    if (queue.popable &&
+        queue.tasks.length === 0 &&
+        this._queueStack.length > 1) {
       this._queueStack.pop();
-      DEBUG &&
-        infoLog('popped queue: ', {
-          stackIdx,
-          queueStackSize: this._queueStack.length,
-        });
+      DEBUG && infoLog('popped queue: ', {stackIdx, queueStackSize: this._queueStack.length});
       return this._getCurrentQueue();
     } else {
       return queue.tasks;
@@ -154,25 +147,22 @@ class TaskQueue {
     const stackIdx = this._queueStack.length - 1;
     DEBUG && infoLog('push new queue: ', {stackIdx});
     DEBUG && infoLog('exec gen task ' + task.name);
-    task
-      .gen()
+    task.gen()
       .then(() => {
-        DEBUG &&
-          infoLog('onThen for gen task ' + task.name, {
-            stackIdx,
-            queueStackSize: this._queueStack.length,
-          });
+        DEBUG && infoLog(
+          'onThen for gen task ' + task.name,
+          {stackIdx, queueStackSize: this._queueStack.length},
+        );
         this._queueStack[stackIdx].popable = true;
         this.hasTasksToProcess() && this._onMoreTasks();
       })
-      .catch(ex => {
-        ex.message = `TaskQueue: Error resolving Promise in task ${
-          task.name
-        }: ${ex.message}`;
+      .catch((ex) => {
+        ex.message = `TaskQueue: Error resolving Promise in task ${task.name}: ${ex.message}`;
         throw ex;
       })
       .done();
   }
 }
+
 
 module.exports = TaskQueue;

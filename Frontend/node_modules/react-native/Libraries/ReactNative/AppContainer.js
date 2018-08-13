@@ -4,6 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
+ * @providesModule AppContainer
  * @format
  * @flow
  */
@@ -21,24 +22,26 @@ const View = require('View');
 type Context = {
   rootTag: number,
 };
-
-type Props = $ReadOnly<{|
-  children?: React.Node,
+type Props = {|
+  /* $FlowFixMe(>=0.53.0 site=react_native_fb,react_native_oss) This comment
+   * suppresses an error when upgrading Flow's support for React. To see the
+   * error delete this comment and run Flow. */
+  children?: React.Children,
+  fabric?: boolean,
   rootTag: number,
-  WrapperComponent?: ?React.ComponentType<any>,
-|}>;
-
-type State = {|
-  inspector: ?React.Node,
-  mainKey: number,
+  WrapperComponent?: ?React.ComponentType<*>,
 |};
+type State = {
+  inspector: ?React.Element<any>,
+  mainKey: number,
+};
 
 class AppContainer extends React.Component<Props, State> {
   state: State = {
     inspector: null,
     mainKey: 1,
   };
-  _mainRef: ?React.ElementRef<typeof View>;
+  _mainRef: ?React.Element<any>;
   _subscription: ?EmitterSubscription = null;
 
   static childContextTypes = {
@@ -80,7 +83,7 @@ class AppContainer extends React.Component<Props, State> {
   }
 
   componentWillUnmount(): void {
-    if (this._subscription != null) {
+    if (this._subscription) {
       this._subscription.remove();
     }
   }
@@ -88,7 +91,8 @@ class AppContainer extends React.Component<Props, State> {
   render(): React.Node {
     let yellowBox = null;
     if (__DEV__) {
-      if (!global.__RCTProfileIsProfiling) {
+      if (!global.__RCTProfileIsProfiling && !this.props.fabric) {
+        // TODO: Fabric doesn't support YellowBox.
         const YellowBox = require('YellowBox');
         yellowBox = <YellowBox />;
       }
@@ -101,6 +105,9 @@ class AppContainer extends React.Component<Props, State> {
         pointerEvents="box-none"
         style={styles.appContainer}
         ref={ref => {
+          /* $FlowFixMe(>=0.53.0 site=react_native_fb,react_native_oss) This
+           * comment suppresses an error when upgrading Flow's support for
+           * React. To see the error delete this comment and run Flow. */
           this._mainRef = ref;
         }}>
         {this.props.children}
@@ -108,7 +115,7 @@ class AppContainer extends React.Component<Props, State> {
     );
 
     const Wrapper = this.props.WrapperComponent;
-    if (Wrapper != null) {
+    if (Wrapper) {
       innerView = <Wrapper>{innerView}</Wrapper>;
     }
     return (
@@ -126,12 +133,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-
-if (__DEV__) {
-  if (!global.__RCTProfileIsProfiling) {
-    const YellowBox = require('YellowBox');
-    YellowBox.install();
-  }
-}
 
 module.exports = AppContainer;

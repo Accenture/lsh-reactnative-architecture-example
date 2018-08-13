@@ -4,13 +4,12 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule PixelRatio
  * @flow
  */
-
 'use strict';
 
-const Dimensions = require('Dimensions');
+var Dimensions = require('Dimensions');
 
 /**
  * PixelRatio class gives access to the device pixel density.
@@ -110,7 +109,7 @@ class PixelRatio {
    * exactly (8.33 * 3) = 25 pixels.
    */
   static roundToNearestPixel(layoutSize: number): number {
-    const ratio = PixelRatio.get();
+    var ratio = PixelRatio.get();
     return Math.round(layoutSize * ratio) / ratio;
   }
 

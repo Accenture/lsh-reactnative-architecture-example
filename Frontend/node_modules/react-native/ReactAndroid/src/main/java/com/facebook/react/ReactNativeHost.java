@@ -7,7 +7,7 @@
 
 package com.facebook.react;
 
-import com.facebook.react.bridge.JSIModulePackage;
+import com.facebook.react.bridge.JSIModulesProvider;
 import javax.annotation.Nullable;
 
 import java.util.List;
@@ -15,6 +15,7 @@ import java.util.List;
 import android.app.Application;
 
 import com.facebook.infer.annotation.Assertions;
+import com.facebook.react.bridge.JSIModulesProvider;
 import com.facebook.react.bridge.JavaScriptExecutorFactory;
 import com.facebook.react.bridge.ReactMarker;
 import com.facebook.react.bridge.ReactMarkerConstants;
@@ -75,7 +76,7 @@ public abstract class ReactNativeHost {
       .setRedBoxHandler(getRedBoxHandler())
       .setJavaScriptExecutorFactory(getJavaScriptExecutorFactory())
       .setUIImplementationProvider(getUIImplementationProvider())
-      .setJSIModulesPackage(getJSIModulePackage())
+      .setJSIModulesProvider(getJSIModulesProvider())
       .setInitialLifecycleState(LifecycleState.BEFORE_CREATE);
 
     for (ReactPackage reactPackage : getPackages()) {
@@ -123,7 +124,7 @@ public abstract class ReactNativeHost {
   }
 
   protected @Nullable
-  JSIModulePackage getJSIModulePackage() {
+  JSIModulesProvider getJSIModulesProvider() {
     return null;
   }
 

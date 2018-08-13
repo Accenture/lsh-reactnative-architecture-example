@@ -4,24 +4,20 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
+ * @providesModule TextInputState
+ * @flow
  *
  * This class is responsible for coordinating the "focused"
  * state for TextInputs. All calls relating to the keyboard
  * should be funneled through here
- *
- * @format
- * @flow
  */
-
 'use strict';
 
 const Platform = require('Platform');
 const UIManager = require('UIManager');
 
-const inputs = new Set();
-
 const TextInputState = {
-  /**
+   /**
    * Internal state
    */
   _currentlyFocusedID: (null: ?number),
@@ -48,7 +44,7 @@ const TextInputState = {
         UIManager.dispatchViewManagerCommand(
           textFieldID,
           UIManager.AndroidTextInput.Commands.focusTextInput,
-          null,
+          null
         );
       }
     }
@@ -68,23 +64,11 @@ const TextInputState = {
         UIManager.dispatchViewManagerCommand(
           textFieldID,
           UIManager.AndroidTextInput.Commands.blurTextInput,
-          null,
+          null
         );
       }
     }
-  },
-
-  registerInput: function(textFieldID: number) {
-    inputs.add(textFieldID);
-  },
-
-  unregisterInput: function(textFieldID: number) {
-    inputs.delete(textFieldID);
-  },
-
-  isTextInput: function(textFieldID: number) {
-    return inputs.has(textFieldID);
-  },
+  }
 };
 
 module.exports = TextInputState;

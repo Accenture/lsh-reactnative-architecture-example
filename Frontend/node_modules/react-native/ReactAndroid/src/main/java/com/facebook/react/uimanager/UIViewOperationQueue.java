@@ -96,54 +96,6 @@ public class UIViewOperationQueue {
     }
   }
 
-  private final class EmitOnLayoutEventOperation extends ViewOperation {
-
-    private final int mScreenX;
-    private final int mScreenY;
-    private final int mScreenWidth;
-    private final int mScreenHeight;
-
-    public EmitOnLayoutEventOperation(
-        int tag,
-        int screenX,
-        int screenY,
-        int screenWidth,
-        int screenHeight) {
-      super(tag);
-      mScreenX = screenX;
-      mScreenY = screenY;
-      mScreenWidth = screenWidth;
-      mScreenHeight = screenHeight;
-    }
-
-    @Override
-    public void execute() {
-      mReactApplicationContext.getNativeModule(UIManagerModule.class)
-        .getEventDispatcher()
-        .dispatchEvent(OnLayoutEvent.obtain(
-          mTag,
-          mScreenX,
-          mScreenY,
-          mScreenWidth,
-          mScreenHeight));
-    }
-  }
-
-  private final class UpdateInstanceHandleOperation extends ViewOperation {
-
-    private final long mInstanceHandle;
-
-    private UpdateInstanceHandleOperation(int tag, long instanceHandle) {
-      super(tag);
-      mInstanceHandle = instanceHandle;
-    }
-
-    @Override
-    public void execute() {
-      mNativeViewHierarchyManager.updateInstanceHandle(mTag, mInstanceHandle);
-    }
-  }
-
   /**
    * Operation for updating native view's position and size. The operation is not created directly
    * by a {@link UIManagerModule} call from JS. Instead it gets inflated using computed position
@@ -330,13 +282,6 @@ public class UIViewOperationQueue {
     @Override
     public void execute() {
       mNativeViewHierarchyManager.showPopupMenu(mTag, mItems, mSuccess, mError);
-    }
-  }
-
-  private final class DismissPopupMenuOperation implements UIOperation {
-    @Override
-    public void execute() {
-      mNativeViewHierarchyManager.dismissPopupMenu();
     }
   }
 
@@ -695,7 +640,7 @@ public class UIViewOperationQueue {
   public void enqueueDispatchCommand(
       int reactTag,
       int commandId,
-      @Nullable ReadableArray commandArgs) {
+      ReadableArray commandArgs) {
     mOperations.add(new DispatchCommandOperation(reactTag, commandId, commandArgs));
   }
 
@@ -709,10 +654,6 @@ public class UIViewOperationQueue {
       Callback error,
       Callback success) {
     mOperations.add(new ShowPopupMenuOperation(reactTag, items, error, success));
-  }
-
-  public void enqueueDismissPopupMenu() {
-    mOperations.add(new DismissPopupMenuOperation());
   }
 
   public void enqueueCreateView(
@@ -730,23 +671,9 @@ public class UIViewOperationQueue {
     }
   }
 
-  public void enqueueUpdateInstanceHandle(int reactTag, long instanceHandle) {
-    mOperations.add(new UpdateInstanceHandleOperation(reactTag, instanceHandle));
-  }
-
   public void enqueueUpdateProperties(int reactTag, String className, ReactStylesDiffMap props) {
     mOperations.add(new UpdatePropertiesOperation(reactTag, props));
   }
-
-  public void enqueueOnLayoutEvent(
-    int tag,
-    int screenX,
-    int screenY,
-    int screenWidth,
-    int screenHeight) {
-    mOperations.add(new EmitOnLayoutEventOperation(tag, screenX, screenY, screenWidth, screenHeight));
-  }
-
 
   public void enqueueUpdateLayout(
       int parentTag,

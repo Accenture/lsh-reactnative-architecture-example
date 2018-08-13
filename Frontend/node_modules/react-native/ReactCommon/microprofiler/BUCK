@@ -1,4 +1,4 @@
-load("//ReactNative:DEFS.bzl", "GLOG_DEP", "cxx_library")
+load("//ReactNative:DEFS.bzl", "cxx_library", "GLOG_DEP")
 
 cxx_library(
     name = "microprofiler",

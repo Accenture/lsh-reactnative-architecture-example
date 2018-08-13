@@ -4,19 +4,17 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule AsyncStorage
  * @noflow
  * @flow-weak
  * @jsdoc
  */
-
 'use strict';
 
 const NativeModules = require('NativeModules');
 
 // Use RocksDB if available, then SQLite, then file storage.
-const RCTAsyncStorage =
-  NativeModules.AsyncRocksDBStorage ||
+const RCTAsyncStorage = NativeModules.AsyncRocksDBStorage ||
   NativeModules.AsyncSQLiteDBStorage ||
   NativeModules.AsyncLocalStorage;
 
@@ -27,7 +25,7 @@ const RCTAsyncStorage =
  *
  * See http://facebook.github.io/react-native/docs/asyncstorage.html
  */
-const AsyncStorage = {
+var AsyncStorage = {
   _getRequests: ([]: Array<any>),
   _getKeys: ([]: Array<string>),
   _immediate: (null: ?number),
@@ -39,13 +37,13 @@ const AsyncStorage = {
    */
   getItem: function(
     key: string,
-    callback?: ?(error: ?Error, result: ?string) => void,
+    callback?: ?(error: ?Error, result: ?string) => void
   ): Promise {
     return new Promise((resolve, reject) => {
       RCTAsyncStorage.multiGet([key], function(errors, result) {
         // Unpack result to get value from [[key,value]]
-        const value = result && result[0] && result[0][1] ? result[0][1] : null;
-        const errs = convertErrors(errors);
+        var value = (result && result[0] && result[0][1]) ? result[0][1] : null;
+        var errs = convertErrors(errors);
         callback && callback(errs && errs[0], value);
         if (errs) {
           reject(errs[0]);
@@ -64,11 +62,11 @@ const AsyncStorage = {
   setItem: function(
     key: string,
     value: string,
-    callback?: ?(error: ?Error) => void,
+    callback?: ?(error: ?Error) => void
   ): Promise {
     return new Promise((resolve, reject) => {
-      RCTAsyncStorage.multiSet([[key, value]], function(errors) {
-        const errs = convertErrors(errors);
+      RCTAsyncStorage.multiSet([[key,value]], function(errors) {
+        var errs = convertErrors(errors);
         callback && callback(errs && errs[0]);
         if (errs) {
           reject(errs[0]);
@@ -86,11 +84,11 @@ const AsyncStorage = {
    */
   removeItem: function(
     key: string,
-    callback?: ?(error: ?Error) => void,
+    callback?: ?(error: ?Error) => void
   ): Promise {
     return new Promise((resolve, reject) => {
       RCTAsyncStorage.multiRemove([key], function(errors) {
-        const errs = convertErrors(errors);
+        var errs = convertErrors(errors);
         callback && callback(errs && errs[0]);
         if (errs) {
           reject(errs[0]);
@@ -112,11 +110,11 @@ const AsyncStorage = {
   mergeItem: function(
     key: string,
     value: string,
-    callback?: ?(error: ?Error) => void,
+    callback?: ?(error: ?Error) => void
   ): Promise {
     return new Promise((resolve, reject) => {
-      RCTAsyncStorage.multiMerge([[key, value]], function(errors) {
-        const errs = convertErrors(errors);
+      RCTAsyncStorage.multiMerge([[key,value]], function(errors) {
+        var errs = convertErrors(errors);
         callback && callback(errs && errs[0]);
         if (errs) {
           reject(errs[0]);
@@ -138,7 +136,7 @@ const AsyncStorage = {
     return new Promise((resolve, reject) => {
       RCTAsyncStorage.clear(function(error) {
         callback && callback(convertError(error));
-        if (error && convertError(error)) {
+        if (error && convertError(error)){
           reject(convertError(error));
         } else {
           resolve(null);
@@ -152,9 +150,7 @@ const AsyncStorage = {
    *
    * See http://facebook.github.io/react-native/docs/asyncstorage.html#getallkeys
    */
-  getAllKeys: function(
-    callback?: ?(error: ?Error, keys: ?Array<string>) => void,
-  ): Promise {
+  getAllKeys: function(callback?: ?(error: ?Error, keys: ?Array<string>) => void): Promise {
     return new Promise((resolve, reject) => {
       RCTAsyncStorage.getAllKeys(function(error, keys) {
         callback && callback(convertError(error), keys);
@@ -197,11 +193,7 @@ const AsyncStorage = {
       // Is there a way to avoid using the map but fix the bug in this breaking test?
       // https://github.com/facebook/react-native/commit/8dd8ad76579d7feef34c014d387bf02065692264
       const map = {};
-      result &&
-        result.forEach(([key, value]) => {
-          map[key] = value;
-          return value;
-        });
+      result && result.forEach(([key, value]) => { map[key] = value; return value; });
       const reqLength = getRequests.length;
       for (let i = 0; i < reqLength; i++) {
         const request = getRequests[i];
@@ -222,7 +214,7 @@ const AsyncStorage = {
    */
   multiGet: function(
     keys: Array<string>,
-    callback?: ?(errors: ?Array<Error>, result: ?Array<Array<string>>) => void,
+    callback?: ?(errors: ?Array<Error>, result: ?Array<Array<string>>) => void
   ): Promise {
     if (!this._immediate) {
       this._immediate = setImmediate(() => {
@@ -231,7 +223,7 @@ const AsyncStorage = {
       });
     }
 
-    const getRequest = {
+    var getRequest = {
       keys: keys,
       callback: callback,
       // do we need this?
@@ -240,7 +232,7 @@ const AsyncStorage = {
       reject: null,
     };
 
-    const promiseResult = new Promise((resolve, reject) => {
+    var promiseResult = new Promise((resolve, reject) => {
       getRequest.resolve = resolve;
       getRequest.reject = reject;
     });
@@ -264,11 +256,11 @@ const AsyncStorage = {
    */
   multiSet: function(
     keyValuePairs: Array<Array<string>>,
-    callback?: ?(errors: ?Array<Error>) => void,
+    callback?: ?(errors: ?Array<Error>) => void
   ): Promise {
     return new Promise((resolve, reject) => {
       RCTAsyncStorage.multiSet(keyValuePairs, function(errors) {
-        const error = convertErrors(errors);
+        var error = convertErrors(errors);
         callback && callback(error);
         if (error) {
           reject(error);
@@ -286,11 +278,11 @@ const AsyncStorage = {
    */
   multiRemove: function(
     keys: Array<string>,
-    callback?: ?(errors: ?Array<Error>) => void,
+    callback?: ?(errors: ?Array<Error>) => void
   ): Promise {
     return new Promise((resolve, reject) => {
       RCTAsyncStorage.multiRemove(keys, function(errors) {
-        const error = convertErrors(errors);
+        var error = convertErrors(errors);
         callback && callback(error);
         if (error) {
           reject(error);
@@ -311,11 +303,11 @@ const AsyncStorage = {
    */
   multiMerge: function(
     keyValuePairs: Array<Array<string>>,
-    callback?: ?(errors: ?Array<Error>) => void,
+    callback?: ?(errors: ?Array<Error>) => void
   ): Promise {
     return new Promise((resolve, reject) => {
       RCTAsyncStorage.multiMerge(keyValuePairs, function(errors) {
-        const error = convertErrors(errors);
+        var error = convertErrors(errors);
         callback && callback(error);
         if (error) {
           reject(error);
@@ -337,14 +329,14 @@ function convertErrors(errs) {
   if (!errs) {
     return null;
   }
-  return (Array.isArray(errs) ? errs : [errs]).map(e => convertError(e));
+  return (Array.isArray(errs) ? errs : [errs]).map((e) => convertError(e));
 }
 
 function convertError(error) {
   if (!error) {
     return null;
   }
-  const out = new Error(error.message);
+  var out = new Error(error.message);
   out.key = error.key; // flow doesn't like this :(
   return out;
 }

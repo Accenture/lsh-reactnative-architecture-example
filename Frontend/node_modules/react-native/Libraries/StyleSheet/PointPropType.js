@@ -4,22 +4,18 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule PointPropType
  * @flow
  */
-
 'use strict';
 
-const PropTypes = require('prop-types');
+var PropTypes = require('prop-types');
 
-const PointPropType = PropTypes.shape({
+var createStrictShapeTypeChecker = require('createStrictShapeTypeChecker');
+
+var PointPropType = createStrictShapeTypeChecker({
   x: PropTypes.number,
   y: PropTypes.number,
 });
-
-export type PointProp = $ReadOnly<{
-  x: number,
-  y: number,
-}>;
 
 module.exports = PointPropType;

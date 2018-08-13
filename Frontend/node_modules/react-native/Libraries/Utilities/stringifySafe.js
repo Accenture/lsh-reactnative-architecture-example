@@ -4,10 +4,9 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule stringifySafe
  * @flow
  */
-
 'use strict';
 
 /**
@@ -15,8 +14,8 @@
  * (e.g. from circular objects) and always returns a string and never throws.
  */
 function stringifySafe(arg: any): string {
-  let ret;
-  const type = typeof arg;
+  var ret;
+  var type = typeof arg;
   if (arg === undefined) {
     ret = 'undefined';
   } else if (arg === null) {

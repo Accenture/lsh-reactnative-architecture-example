@@ -4,10 +4,9 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule IncrementalGroup
  * @flow
  */
-
 'use strict';
 
 const Incremental = require('Incremental');
@@ -38,7 +37,9 @@ class IncrementalGroup extends React.Component<Props & {disabled?: boolean}> {
   _groupInc: string;
   UNSAFE_componentWillMount() {
     this._groupInc = `g${++_groupCounter}-`;
-    DEBUG && infoLog('create IncrementalGroup with id ' + this.getGroupId());
+    DEBUG && infoLog(
+      'create IncrementalGroup with id ' + this.getGroupId()
+    );
   }
 
   getGroupId(): string {
@@ -65,7 +66,10 @@ class IncrementalGroup extends React.Component<Props & {disabled?: boolean}> {
 
   render(): React.Node {
     return (
-      <Incremental onDone={this.props.onDone} children={this.props.children} />
+      <Incremental
+        onDone={this.props.onDone}
+        children={this.props.children}
+      />
     );
   }
 }

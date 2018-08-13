@@ -121,32 +121,11 @@ public class ReadableNativeMap extends NativeMap implements ReadableMap {
     }
     throw new NoSuchKeyException(name);
   }
-
-  private <T> T getValue(String name, Class<T> type) {
-    Object value = getValue(name);
-    checkInstance(name, value, type);
-    return (T) value;
-  }
-
   private @Nullable Object getNullableValue(String name) {
     if (hasKey(name)) {
       return getLocalMap().get(name);
     }
     throw new NoSuchKeyException(name);
-  }
-
-  private @Nullable <T> T getNullableValue(String name, Class<T> type) {
-    Object value = getNullableValue(name);
-    checkInstance(name, value, type);
-    return (T) value;
-  }
-
-  private void checkInstance(String name, Object value, Class type) {
-    if (value != null && !type.isInstance(value)) {
-      throw new ClassCastException(
-        "Value for " + name + " cannot be cast from " +
-          value.getClass().getSimpleName() + " to " + type.getSimpleName());
-    }
   }
 
   @Override
@@ -155,7 +134,7 @@ public class ReadableNativeMap extends NativeMap implements ReadableMap {
       mJniCallCounter++;
       return getBooleanNative(name);
     }
-    return getValue(name, Boolean.class).booleanValue();
+    return ((Boolean) getValue(name)).booleanValue();
   }
   private native boolean getBooleanNative(String name);
 
@@ -165,7 +144,7 @@ public class ReadableNativeMap extends NativeMap implements ReadableMap {
       mJniCallCounter++;
       return getDoubleNative(name);
     }
-    return getValue(name, Double.class).doubleValue();
+    return ((Double) getValue(name)).doubleValue();
   }
   private native double getDoubleNative(String name);
 
@@ -175,9 +154,8 @@ public class ReadableNativeMap extends NativeMap implements ReadableMap {
       mJniCallCounter++;
       return getIntNative(name);
     }
-
     // All numbers coming out of native are doubles, so cast here then truncate
-    return getValue(name, Double.class).intValue();
+    return ((Double) getValue(name)).intValue();
   }
   private native int getIntNative(String name);
 
@@ -187,7 +165,7 @@ public class ReadableNativeMap extends NativeMap implements ReadableMap {
       mJniCallCounter++;
       return getStringNative(name);
     }
-    return getNullableValue(name, String.class);
+    return (String) getNullableValue(name);
   }
   private native String getStringNative(String name);
 
@@ -197,7 +175,7 @@ public class ReadableNativeMap extends NativeMap implements ReadableMap {
       mJniCallCounter++;
       return getArrayNative(name);
     }
-    return getNullableValue(name, ReadableArray.class);
+    return (ReadableArray) getNullableValue(name);
   }
   private native ReadableNativeArray getArrayNative(String name);
 
@@ -207,7 +185,7 @@ public class ReadableNativeMap extends NativeMap implements ReadableMap {
       mJniCallCounter++;
       return getMapNative(name);
     }
-    return getNullableValue(name, ReadableNativeMap.class);
+    return (ReadableNativeMap) getNullableValue(name);
   }
   private native ReadableNativeMap getMapNative(String name);
 

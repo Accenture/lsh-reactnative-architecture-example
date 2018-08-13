@@ -4,22 +4,23 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
+ * @providesModule UIManagerStatTracker
  * @flow
  * @format
  */
 'use strict';
 
-const UIManager = require('UIManager');
+var UIManager = require('UIManager');
 
-let installed = false;
-const UIManagerStatTracker = {
+var installed = false;
+var UIManagerStatTracker = {
   install: function() {
     if (installed) {
       return;
     }
     installed = true;
-    let statLogHandle;
-    const stats = {};
+    var statLogHandle;
+    var stats = {};
     function printStats() {
       console.log({UIManagerStatTracker: stats});
       statLogHandle = null;
@@ -30,19 +31,19 @@ const UIManagerStatTracker = {
         statLogHandle = setImmediate(printStats);
       }
     }
-    const createViewOrig = UIManager.createView;
+    var createViewOrig = UIManager.createView;
     UIManager.createView = function(tag, className, rootTag, props) {
       incStat('createView', 1);
       incStat('setProp', Object.keys(props || []).length);
       createViewOrig(tag, className, rootTag, props);
     };
-    const updateViewOrig = UIManager.updateView;
+    var updateViewOrig = UIManager.updateView;
     UIManager.updateView = function(tag, className, props) {
       incStat('updateView', 1);
       incStat('setProp', Object.keys(props || []).length);
       updateViewOrig(tag, className, props);
     };
-    const manageChildrenOrig = UIManager.manageChildren;
+    var manageChildrenOrig = UIManager.manageChildren;
     UIManager.manageChildren = function(
       tag,
       moveFrom,

@@ -31,11 +31,6 @@ public class ReactBridgeIdleSignaler implements NotThreadSafeBridgeIdleDebugList
   }
 
   @Override
-  public void onBridgeDestroyed() {
-    // Do nothing
-  }
-
-  @Override
   public void onTransitionToBridgeBusy() {
     mIsBridgeIdle = false;
     try {

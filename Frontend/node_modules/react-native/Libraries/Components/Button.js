@@ -4,10 +4,9 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule Button
  * @flow
  */
-
 'use strict';
 
 const ColorPropType = require('ColorPropType');
@@ -58,6 +57,7 @@ class Button extends React.Component<{
   accessibilityLabel?: ?string,
   disabled?: ?boolean,
   testID?: ?string,
+  hasTVPreferredFocus?: ?boolean,
 }> {
   static propTypes = {
     /**
@@ -119,10 +119,8 @@ class Button extends React.Component<{
       typeof title === 'string',
       'The title prop of a Button must be a string',
     );
-    const formattedTitle =
-      Platform.OS === 'android' ? title.toUpperCase() : title;
-    const Touchable =
-      Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity;
+    const formattedTitle = Platform.OS === 'android' ? title.toUpperCase() : title;
+    const Touchable = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity;
     return (
       <Touchable
         accessibilityComponentType="button"
@@ -133,9 +131,7 @@ class Button extends React.Component<{
         disabled={disabled}
         onPress={onPress}>
         <View style={buttonStyles}>
-          <Text style={textStyles} disabled={disabled}>
-            {formattedTitle}
-          </Text>
+          <Text style={textStyles} disabled={disabled}>{formattedTitle}</Text>
         </View>
       </Touchable>
     );
@@ -172,7 +168,7 @@ const styles = StyleSheet.create({
     android: {
       elevation: 0,
       backgroundColor: '#dfdfdf',
-    },
+    }
   }),
   textDisabled: Platform.select({
     ios: {
@@ -180,7 +176,7 @@ const styles = StyleSheet.create({
     },
     android: {
       color: '#a1a1a1',
-    },
+    }
   }),
 });
 

@@ -67,9 +67,6 @@ static void YGTransferLayoutOutputsRecursive(YGNodeRef root) {
 
       static auto edgeSetFlagField = obj->getClass()->getField<jint>("mEdgeSetFlag");
       static auto hasNewLayoutField = obj->getClass()->getField<jboolean>("mHasNewLayout");
-      static auto doesLegacyStretchBehaviour =
-          obj->getClass()->getField<jboolean>(
-              "mDoesLegacyStretchFlagAffectsLayout");
 
       /* Those flags needs be in sync with YogaNode.java */
       const int MARGIN = 1;
@@ -82,19 +79,12 @@ static void YGTransferLayoutOutputsRecursive(YGNodeRef root) {
       obj->setFieldValue(heightField, YGNodeLayoutGetHeight(root));
       obj->setFieldValue(leftField, YGNodeLayoutGetLeft(root));
       obj->setFieldValue(topField, YGNodeLayoutGetTop(root));
-      obj->setFieldValue<jboolean>(
-          doesLegacyStretchBehaviour,
-          YGNodeLayoutGetDidLegacyStretchFlagAffectLayout(root));
 
       if ((hasEdgeSetFlag & MARGIN) == MARGIN) {
-        obj->setFieldValue(
-            marginLeftField, YGNodeLayoutGetMargin(root, YGEdgeLeft));
-        obj->setFieldValue(
-            marginTopField, YGNodeLayoutGetMargin(root, YGEdgeTop));
-        obj->setFieldValue(
-            marginRightField, YGNodeLayoutGetMargin(root, YGEdgeRight));
-        obj->setFieldValue(
-            marginBottomField, YGNodeLayoutGetMargin(root, YGEdgeBottom));
+        obj->setFieldValue(marginLeftField, YGNodeLayoutGetMargin(root, YGEdgeLeft));
+        obj->setFieldValue(marginTopField, YGNodeLayoutGetMargin(root, YGEdgeTop));
+        obj->setFieldValue(marginRightField, YGNodeLayoutGetMargin(root, YGEdgeRight));
+        obj->setFieldValue(marginBottomField, YGNodeLayoutGetMargin(root, YGEdgeBottom));
       }
 
       if ((hasEdgeSetFlag & PADDING) == PADDING) {
@@ -142,49 +132,31 @@ static float YGJNIBaselineFunc(YGNodeRef node, float width, float height) {
   }
 }
 
-static inline YGNodeRef _jlong2YGNodeRef(jlong addr) {
-  return reinterpret_cast<YGNodeRef>(static_cast<intptr_t>(addr));
-}
-
-static inline YGConfigRef _jlong2YGConfigRef(jlong addr) {
-  return reinterpret_cast<YGConfigRef>(static_cast<intptr_t>(addr));
-}
-
-static YGNodeRef YGJNIOnNodeClonedFunc(
+static void YGJNIOnNodeClonedFunc(
     YGNodeRef oldNode,
-    YGNodeRef owner,
+    YGNodeRef newNode,
+    YGNodeRef parent,
     int childIndex) {
   auto config = oldNode->getConfig();
   if (!config) {
-    return nullptr;
+    return;
   }
-
   static auto onNodeClonedFunc = findClassStatic("com/facebook/yoga/YogaConfig")
-                                     ->getMethod<alias_ref<JYogaNode>(
+                                     ->getMethod<void(
                                          local_ref<JYogaNode>,
                                          local_ref<JYogaNode>,
-                                         jint)>("cloneNode");
+                                         local_ref<JYogaNode>,
+                                         jint)>("onNodeCloned");
 
   auto context = reinterpret_cast<YGConfigContext*>(YGConfigGetContext(config));
   auto javaConfig = context->config;
 
-  auto newNode = onNodeClonedFunc(
+  onNodeClonedFunc(
       javaConfig->get(),
       YGNodeJobject(oldNode)->lockLocal(),
-      YGNodeJobject(owner)->lockLocal(),
+      YGNodeJobject(newNode)->lockLocal(),
+      YGNodeJobject(parent)->lockLocal(),
       childIndex);
-
-  static auto replaceChild = findClassStatic("com/facebook/yoga/YogaNode")
-                                     ->getMethod<jlong(
-                                         local_ref<JYogaNode>,
-                                         jint)>("replaceChild");
-
-  jlong newNodeNativePointer = replaceChild(
-      YGNodeJobject(owner)->lockLocal(),
-      newNode,
-      childIndex);
-
-  return _jlong2YGNodeRef(newNodeNativePointer);
 }
 
 static YGSize YGJNIMeasureFunc(
@@ -252,6 +224,14 @@ static int YGJNILogFunc(const YGConfigRef config,
   return result;
 }
 
+static inline YGNodeRef _jlong2YGNodeRef(jlong addr) {
+  return reinterpret_cast<YGNodeRef>(static_cast<intptr_t>(addr));
+}
+
+static inline YGConfigRef _jlong2YGConfigRef(jlong addr) {
+  return reinterpret_cast<YGConfigRef>(static_cast<intptr_t>(addr));
+}
+
 jlong jni_YGNodeNew(alias_ref<jobject> thiz) {
   const YGNodeRef node = YGNodeNew();
   node->setContext(new weak_ref<jobject>(make_weak(thiz)));
@@ -284,11 +264,6 @@ void jni_YGNodeFree(alias_ref<jobject> thiz, jlong nativePointer) {
   YGNodeFree(node);
 }
 
-void jni_YGNodeClearChildren(alias_ref<jobject> thiz, jlong nativePointer) {
-  const YGNodeRef node = _jlong2YGNodeRef(nativePointer);
-  node->clearChildren();
-}
-
 void jni_YGNodeReset(alias_ref<jobject> thiz, jlong nativePointer) {
   const YGNodeRef node = _jlong2YGNodeRef(nativePointer);
   void* context = node->getContext();
@@ -306,15 +281,6 @@ void jni_YGNodePrint(alias_ref<jobject> thiz, jlong nativePointer) {
 
 void jni_YGNodeInsertChild(alias_ref<jobject>, jlong nativePointer, jlong childPointer, jint index) {
   YGNodeInsertChild(_jlong2YGNodeRef(nativePointer), _jlong2YGNodeRef(childPointer), index);
-}
-
-void jni_YGNodeInsertSharedChild(
-    alias_ref<jobject>,
-    jlong nativePointer,
-    jlong childPointer,
-    jint index) {
-  YGNodeInsertSharedChild(
-      _jlong2YGNodeRef(nativePointer), _jlong2YGNodeRef(childPointer), index);
 }
 
 void jni_YGNodeRemoveChild(alias_ref<jobject>, jlong nativePointer, jlong childPointer) {
@@ -501,14 +467,6 @@ void jni_YGConfigSetExperimentalFeatureEnabled(alias_ref<jobject>,
                                         enabled);
 }
 
-void jni_YGConfigSetShouldDiffLayoutWithoutLegacyStretchBehaviour(
-    alias_ref<jobject>,
-    jlong nativePointer,
-    jboolean enabled) {
-  const YGConfigRef config = _jlong2YGConfigRef(nativePointer);
-  YGConfigSetShouldDiffLayoutWithoutLegacyStretchBehaviour(config, enabled);
-}
-
 void jni_YGConfigSetUseWebDefaults(alias_ref<jobject>,
                                    jlong nativePointer,
                                    jboolean useWebDefaults) {
@@ -530,10 +488,10 @@ void jni_YGConfigSetUseLegacyStretchBehaviour(alias_ref<jobject>,
   YGConfigSetUseLegacyStretchBehaviour(config, useLegacyStretchBehaviour);
 }
 
-void jni_YGConfigSetHasCloneNodeFunc(
+void jni_YGConfigSetHasNodeClonedFunc(
     alias_ref<jobject> thiz,
     jlong nativePointer,
-    jboolean hasCloneNodeFunc) {
+    jboolean hasNodeClonedFunc) {
   const YGConfigRef config = _jlong2YGConfigRef(nativePointer);
   auto context = reinterpret_cast<YGConfigContext*>(YGConfigGetContext(config));
   if (context && context->config) {
@@ -541,15 +499,15 @@ void jni_YGConfigSetHasCloneNodeFunc(
     context->config = nullptr;
   }
 
-  if (hasCloneNodeFunc) {
+  if (hasNodeClonedFunc) {
     if (!context) {
       context = new YGConfigContext();
       YGConfigSetContext(config, context);
     }
     context->config = new global_ref<jobject>(make_global(thiz));
-    YGConfigSetCloneNodeFunc(config, YGJNIOnNodeClonedFunc);
+    YGConfigSetNodeClonedFunc(config, YGJNIOnNodeClonedFunc);
   } else {
-    YGConfigSetCloneNodeFunc(config, nullptr);
+    YGConfigSetNodeClonedFunc(config, nullptr);
   }
 }
 
@@ -591,9 +549,7 @@ jint JNI_OnLoad(JavaVM *vm, void *) {
             YGMakeNativeMethod(jni_YGNodeNewWithConfig),
             YGMakeNativeMethod(jni_YGNodeFree),
             YGMakeNativeMethod(jni_YGNodeReset),
-            YGMakeNativeMethod(jni_YGNodeClearChildren),
             YGMakeNativeMethod(jni_YGNodeInsertChild),
-            YGMakeNativeMethod(jni_YGNodeInsertSharedChild),
             YGMakeNativeMethod(jni_YGNodeRemoveChild),
             YGMakeNativeMethod(jni_YGNodeCalculateLayout),
             YGMakeNativeMethod(jni_YGNodeMarkDirty),
@@ -668,19 +624,16 @@ jint JNI_OnLoad(JavaVM *vm, void *) {
             YGMakeNativeMethod(jni_YGNodePrint),
             YGMakeNativeMethod(jni_YGNodeClone),
         });
-    registerNatives(
-        "com/facebook/yoga/YogaConfig",
-        {
-            YGMakeNativeMethod(jni_YGConfigNew),
-            YGMakeNativeMethod(jni_YGConfigFree),
-            YGMakeNativeMethod(jni_YGConfigSetExperimentalFeatureEnabled),
-            YGMakeNativeMethod(jni_YGConfigSetUseWebDefaults),
-            YGMakeNativeMethod(jni_YGConfigSetPointScaleFactor),
-            YGMakeNativeMethod(jni_YGConfigSetUseLegacyStretchBehaviour),
-            YGMakeNativeMethod(jni_YGConfigSetLogger),
-            YGMakeNativeMethod(jni_YGConfigSetHasCloneNodeFunc),
-            YGMakeNativeMethod(
-                jni_YGConfigSetShouldDiffLayoutWithoutLegacyStretchBehaviour),
-        });
+    registerNatives("com/facebook/yoga/YogaConfig",
+                    {
+                        YGMakeNativeMethod(jni_YGConfigNew),
+                        YGMakeNativeMethod(jni_YGConfigFree),
+                        YGMakeNativeMethod(jni_YGConfigSetExperimentalFeatureEnabled),
+                        YGMakeNativeMethod(jni_YGConfigSetUseWebDefaults),
+                        YGMakeNativeMethod(jni_YGConfigSetPointScaleFactor),
+                        YGMakeNativeMethod(jni_YGConfigSetUseLegacyStretchBehaviour),
+                        YGMakeNativeMethod(jni_YGConfigSetLogger),
+                        YGMakeNativeMethod(jni_YGConfigSetHasNodeClonedFunc),
+                    });
   });
 }

@@ -4,10 +4,9 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule NavigatorIOS
  * @flow
  */
-
 'use strict';
 
 const EventEmitter = require('EventEmitter');
@@ -42,12 +41,14 @@ class NavigatorTransitionerIOS extends React.Component<$FlowFixMeProps> {
   requestSchedulingNavigation(cb) {
     RCTNavigatorManager.requestSchedulingJavaScriptNavigation(
       ReactNative.findNodeHandle(this),
-      cb,
+      cb
     );
   }
 
   render() {
-    return <RCTNavigator {...this.props} />;
+    return (
+      <RCTNavigator {...this.props}/>
+    );
   }
 }
 
@@ -107,7 +108,7 @@ type State = {
   toIndex: number,
   makingNavigatorRequest: boolean,
   updatingAllIndicesAtOrBeyond: ?number,
-};
+}
 
 type Event = Object;
 
@@ -308,6 +309,7 @@ const NavigatorIOS = createReactClass({
   displayName: 'NavigatorIOS',
 
   propTypes: {
+
     /**
      * NavigatorIOS uses `route` objects to identify child views, their props,
      * and navigation bar configuration. Navigation operations such as push
@@ -435,16 +437,17 @@ const NavigatorIOS = createReactClass({
        */
       barStyle: PropTypes.oneOf(['default', 'black']),
 
-      /**
+       /**
        * The text color of the navigation bar title.
        */
       titleTextColor: PropTypes.string,
 
-      /**
+       /**
        * Boolean value that indicates whether the navigation bar is
        * translucent.
        */
       translucent: PropTypes.bool,
+
     }).isRequired,
 
     /**
@@ -505,6 +508,7 @@ const NavigatorIOS = createReactClass({
      * behavior.
      */
     interactivePopGestureEnabled: PropTypes.bool,
+
   },
 
   navigator: (undefined: ?Object),
@@ -605,7 +609,7 @@ const NavigatorIOS = createReactClass({
 
   _tryLockNavigator: function(cb: () => void) {
     this.refs[TRANSITIONER_REF].requestSchedulingNavigation(
-      acquiredLock => acquiredLock && cb(),
+      (acquiredLock) => acquiredLock && cb()
     );
   },
 
@@ -614,9 +618,7 @@ const NavigatorIOS = createReactClass({
 
     invariant(
       newObservedTopOfStack <= this.state.requestedTopOfStack,
-      'No navigator item should be pushed without JS knowing about it %s %s',
-      newObservedTopOfStack,
-      this.state.requestedTopOfStack,
+      'No navigator item should be pushed without JS knowing about it %s %s', newObservedTopOfStack, this.state.requestedTopOfStack
     );
     const wasWaitingForConfirmation =
       this.state.requestedTopOfStack !== this.state.observedTopOfStack;
@@ -624,7 +626,7 @@ const NavigatorIOS = createReactClass({
       invariant(
         newObservedTopOfStack === this.state.requestedTopOfStack,
         'If waiting for observedTopOfStack to reach requestedTopOfStack, ' +
-          'the only valid observedTopOfStack should be requestedTopOfStack.',
+        'the only valid observedTopOfStack should be requestedTopOfStack.'
       );
     }
     // Mark the most recent observation regardless of if we can lock the
@@ -652,15 +654,12 @@ const NavigatorIOS = createReactClass({
     // even uses the indices in this case, but let's make this describe the
     // truth anyways).
     const updatingAllIndicesAtOrBeyond =
-      this.state.routeStack.length > this.state.observedTopOfStack + 1
-        ? this.state.observedTopOfStack + 1
-        : null;
+      this.state.routeStack.length > this.state.observedTopOfStack + 1 ?
+      this.state.observedTopOfStack + 1 :
+      null;
     this.setState({
       idStack: this.state.idStack.slice(0, this.state.observedTopOfStack + 1),
-      routeStack: this.state.routeStack.slice(
-        0,
-        this.state.observedTopOfStack + 1,
-      ),
+      routeStack: this.state.routeStack.slice(0, this.state.observedTopOfStack + 1),
       // Now we rerequest the top of stack that we observed.
       requestedTopOfStack: this.state.observedTopOfStack,
       makingNavigatorRequest: true,
@@ -677,6 +676,7 @@ const NavigatorIOS = createReactClass({
     // Make sure all previous requests are caught up first. Otherwise reject.
     if (this.state.requestedTopOfStack === this.state.observedTopOfStack) {
       this._tryLockNavigator(() => {
+
         const nextStack = this.state.routeStack.concat([route]);
         const nextIDStack = this.state.idStack.concat([getuid()]);
         this.setState({
@@ -753,6 +753,7 @@ const NavigatorIOS = createReactClass({
       makingNavigatorRequest: false,
       updatingAllIndicesAtOrBeyond: index,
     });
+
   },
 
   /**
@@ -787,7 +788,7 @@ const NavigatorIOS = createReactClass({
     const indexOfRoute = this.state.routeStack.indexOf(route);
     invariant(
       indexOfRoute !== -1,
-      "Calling pop to route for a route that doesn't exist!",
+      'Calling pop to route for a route that doesn\'t exist!'
     );
     const numToPop = this.state.routeStack.length - indexOfRoute - 1;
     this.popN(numToPop);
@@ -851,8 +852,16 @@ const NavigatorIOS = createReactClass({
         <RCTNavigatorItem
           {...props}
           {...route}
-          style={[styles.stackItem, itemWrapperStyle, wrapperStyle]}>
-          <Component navigator={this.navigator} route={route} {...passProps} />
+          style={[
+            styles.stackItem,
+            itemWrapperStyle,
+            wrapperStyle
+          ]}>
+          <Component
+            navigator={this.navigator}
+            route={route}
+            {...passProps}
+          />
         </RCTNavigatorItem>
       </StaticContainer>
     );
@@ -864,9 +873,8 @@ const NavigatorIOS = createReactClass({
       this.state.updatingAllIndicesAtOrBeyond !== null;
     // If not recursing update to navigator at all, may as well avoid
     // computation of navigator children.
-    const items = shouldRecurseToNavigator
-      ? this.state.routeStack.map(this._routeToStackItem)
-      : null;
+    const items = shouldRecurseToNavigator ?
+      this.state.routeStack.map(this._routeToStackItem) : null;
     return (
       <StaticContainer shouldUpdate={shouldRecurseToNavigator}>
         <NavigatorTransitionerIOS
@@ -876,9 +884,7 @@ const NavigatorIOS = createReactClass({
           vertical={this.props.vertical}
           requestedTopOfStack={this.state.requestedTopOfStack}
           onNavigationComplete={this._handleNavigationComplete}
-          interactivePopGestureEnabled={
-            this.props.interactivePopGestureEnabled
-          }>
+          interactivePopGestureEnabled={this.props.interactivePopGestureEnabled}>
           {items}
         </NavigatorTransitionerIOS>
       </StaticContainer>
@@ -906,7 +912,9 @@ const NavigatorIOS = createReactClass({
   render: function() {
     return (
       // $FlowFixMe(>=0.41.0)
-      <View style={this.props.style}>{this._renderNavigationStackItems()}</View>
+      <View style={this.props.style}>
+        {this._renderNavigationStackItems()}
+      </View>
     );
   },
 });

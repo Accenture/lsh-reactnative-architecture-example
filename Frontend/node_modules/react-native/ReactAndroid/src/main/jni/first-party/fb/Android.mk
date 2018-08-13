@@ -13,7 +13,6 @@ LOCAL_SRC_FILES:= \
        jni/jni_helpers.cpp \
        jni/LocalString.cpp \
        jni/OnLoad.cpp \
-       jni/ReadableByteChannel.cpp \
        jni/References.cpp \
        jni/WeakReference.cpp \
        log.cpp \

@@ -4,15 +4,14 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule Vibration
  * @flow
  * @jsdoc
  */
-
 'use strict';
 
-const RCTVibration = require('NativeModules').Vibration;
-const Platform = require('Platform');
+var RCTVibration = require('NativeModules').Vibration;
+var Platform = require('Platform');
 
 /**
  * Vibration API
@@ -20,8 +19,8 @@ const Platform = require('Platform');
  * See https://facebook.github.io/react-native/docs/vibration.html
  */
 
-let _vibrating: boolean = false;
-let _id: number = 0; // _id is necessary to prevent race condition.
+var _vibrating: boolean = false;
+var _id: number = 0; // _id is necessary to prevent race condition.
 
 function vibrateByPattern(pattern: Array<number>, repeat: boolean = false) {
   if (_vibrating) {
@@ -39,12 +38,7 @@ function vibrateByPattern(pattern: Array<number>, repeat: boolean = false) {
   setTimeout(() => vibrateScheduler(++_id, pattern, repeat, 1), pattern[0]);
 }
 
-function vibrateScheduler(
-  id,
-  pattern: Array<number>,
-  repeat: boolean,
-  nextIndex: number,
-) {
+function vibrateScheduler(id, pattern: Array<number>, repeat: boolean, nextIndex: number) {
   if (!_vibrating || id !== _id) {
     return;
   }
@@ -57,22 +51,16 @@ function vibrateScheduler(
       return;
     }
   }
-  setTimeout(
-    () => vibrateScheduler(id, pattern, repeat, nextIndex + 1),
-    pattern[nextIndex],
-  );
+  setTimeout(() => vibrateScheduler(id, pattern, repeat, nextIndex + 1), pattern[nextIndex]);
 }
 
-const Vibration = {
+var Vibration = {
   /**
    * Trigger a vibration with specified `pattern`.
    *
    * See https://facebook.github.io/react-native/docs/vibration.html#vibrate
    */
-  vibrate: function(
-    pattern: number | Array<number> = 400,
-    repeat: boolean = false,
-  ) {
+  vibrate: function(pattern: number | Array<number> = 400, repeat: boolean = false) {
     if (Platform.OS === 'android') {
       if (typeof pattern === 'number') {
         RCTVibration.vibrate(pattern);
@@ -105,7 +93,7 @@ const Vibration = {
     } else {
       RCTVibration.cancel();
     }
-  },
+  }
 };
 
 module.exports = Vibration;

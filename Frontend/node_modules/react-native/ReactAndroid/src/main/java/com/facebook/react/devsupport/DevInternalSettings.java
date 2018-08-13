@@ -30,7 +30,6 @@ public class DevInternalSettings implements
   private static final String PREFS_JS_DEV_MODE_DEBUG_KEY = "js_dev_mode_debug";
   private static final String PREFS_JS_MINIFY_DEBUG_KEY = "js_minify_debug";
   private static final String PREFS_JS_BUNDLE_DELTAS_KEY = "js_bundle_deltas";
-  private static final String PREFS_JS_BUNDLE_DELTAS_CPP_KEY = "js_bundle_deltas_cpp";
   private static final String PREFS_ANIMATIONS_DEBUG_KEY = "animations_debug";
   private static final String PREFS_RELOAD_ON_JS_CHANGE_KEY = "reload_on_js_change";
   private static final String PREFS_INSPECTOR_DEBUG_KEY = "inspector_debug";
@@ -40,29 +39,14 @@ public class DevInternalSettings implements
   private final SharedPreferences mPreferences;
   private final Listener mListener;
   private final PackagerConnectionSettings mPackagerConnectionSettings;
-  private final boolean mSupportsNativeDeltaClients;
-
-  public static DevInternalSettings withoutNativeDeltaClient(
-      Context applicationContext,
-      Listener listener) {
-    return new DevInternalSettings(applicationContext, listener, false);
-  }
 
   public DevInternalSettings(
       Context applicationContext,
       Listener listener) {
-    this(applicationContext, listener, true);
-  }
-
-  private DevInternalSettings(
-      Context applicationContext,
-      Listener listener,
-      boolean supportsNativeDeltaClients) {
     mListener = listener;
     mPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext);
     mPreferences.registerOnSharedPreferenceChangeListener(this);
     mPackagerConnectionSettings = new PackagerConnectionSettings(applicationContext);
-    mSupportsNativeDeltaClients = supportsNativeDeltaClients;
   }
 
   public PackagerConnectionSettings getPackagerConnectionSettings() {
@@ -99,7 +83,6 @@ public class DevInternalSettings implements
           || PREFS_RELOAD_ON_JS_CHANGE_KEY.equals(key)
           || PREFS_JS_DEV_MODE_DEBUG_KEY.equals(key)
           || PREFS_JS_BUNDLE_DELTAS_KEY.equals(key)
-          || PREFS_JS_BUNDLE_DELTAS_CPP_KEY.equals(key)
           || PREFS_JS_MINIFY_DEBUG_KEY.equals(key)) {
         mListener.onInternalSettingsChanged();
       }
@@ -138,16 +121,6 @@ public class DevInternalSettings implements
   @SuppressLint("SharedPreferencesUse")
   public void setBundleDeltasEnabled(boolean enabled) {
     mPreferences.edit().putBoolean(PREFS_JS_BUNDLE_DELTAS_KEY, enabled).apply();
-  }
-
-  @SuppressLint("SharedPreferencesUse")
-  public boolean isBundleDeltasCppEnabled() {
-    return mSupportsNativeDeltaClients && mPreferences.getBoolean(PREFS_JS_BUNDLE_DELTAS_CPP_KEY, false);
-  }
-
-  @SuppressLint("SharedPreferencesUse")
-  public void setBundleDeltasCppEnabled(boolean enabled) {
-    mPreferences.edit().putBoolean(PREFS_JS_BUNDLE_DELTAS_CPP_KEY, enabled).apply();
   }
 
   @Override

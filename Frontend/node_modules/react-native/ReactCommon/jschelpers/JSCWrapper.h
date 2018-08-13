@@ -99,7 +99,6 @@ struct JSCWrapper {
 
   // JSClass
   JSC_WRAPPER_METHOD(JSClassCreate);
-  JSC_WRAPPER_METHOD(JSClassRetain);
   JSC_WRAPPER_METHOD(JSClassRelease);
 
   // JSObject

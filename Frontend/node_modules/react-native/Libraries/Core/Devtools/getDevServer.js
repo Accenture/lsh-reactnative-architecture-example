@@ -4,10 +4,9 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule getDevServer
  * @flow
  */
-
 'use strict';
 
 const {SourceCode} = require('NativeModules');
@@ -26,10 +25,7 @@ type DevServerInfo = {
  */
 function getDevServer(): DevServerInfo {
   if (_cachedDevServerURL === undefined) {
-    const match =
-      SourceCode &&
-      SourceCode.scriptURL &&
-      SourceCode.scriptURL.match(/^https?:\/\/.*?\//);
+    const match = SourceCode && SourceCode.scriptURL && SourceCode.scriptURL.match(/^https?:\/\/.*?\//);
     _cachedDevServerURL = match ? match[0] : null;
   }
 

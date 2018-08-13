@@ -3,10 +3,7 @@
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
- *
- * @format
  */
-
 'use strict';
 
 /**
@@ -43,7 +40,7 @@ function findMatchingSimulator(simulators, simulatorName) {
           udid: simulator.udid,
           name: simulator.name,
           booted,
-          version,
+          version
         };
       }
       if (simulator.name === simulatorName && !match) {
@@ -51,7 +48,7 @@ function findMatchingSimulator(simulators, simulatorName) {
           udid: simulator.udid,
           name: simulator.name,
           booted,
-          version,
+          version
         };
       }
       // Keeps track of the first available simulator for use if we can't find one above.
@@ -60,7 +57,7 @@ function findMatchingSimulator(simulators, simulatorName) {
           udid: simulator.udid,
           name: simulator.name,
           booted,
-          version,
+          version
         };
       }
     }

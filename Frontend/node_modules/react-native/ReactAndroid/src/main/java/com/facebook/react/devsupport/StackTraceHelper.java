@@ -28,10 +28,8 @@ public class StackTraceHelper {
   public static final java.lang.String COLUMN_KEY = "column";
   public static final java.lang.String LINE_NUMBER_KEY = "lineNumber";
 
-  private static final Pattern STACK_FRAME_PATTERN1 = Pattern.compile(
+  private static final Pattern STACK_FRAME_PATTERN = Pattern.compile(
       "^(?:(.*?)@)?(.*?)\\:([0-9]+)\\:([0-9]+)$");
-  private static final Pattern STACK_FRAME_PATTERN2 = Pattern.compile(
-      "\\s*(?:at)\\s*(.+?)\\s*[@(](.*):([0-9]+):([0-9]+)[)]$");
 
   /**
    * Represents a generic entry in a stack trace, be it originally from JS or Java.
@@ -177,22 +175,16 @@ public class StackTraceHelper {
     String[] stackTrace = stack.split("\n");
     StackFrame[] result = new StackFrame[stackTrace.length];
     for (int i = 0; i < stackTrace.length; ++i) {
-      Matcher matcher1 = STACK_FRAME_PATTERN1.matcher(stackTrace[i]);
-      Matcher matcher2 = STACK_FRAME_PATTERN2.matcher(stackTrace[i]);
-      Matcher matcher;
-      if (matcher2.find()) {
-        matcher = matcher2;
-      } else if (matcher1.find()) {
-        matcher = matcher1;
+      Matcher matcher = STACK_FRAME_PATTERN.matcher(stackTrace[i]);
+      if (matcher.find()) {
+        result[i] = new StackFrameImpl(
+          matcher.group(2),
+          matcher.group(1) == null ? "(unknown)" : matcher.group(1),
+          Integer.parseInt(matcher.group(3)),
+          Integer.parseInt(matcher.group(4)));
       } else {
         result[i] = new StackFrameImpl(null, stackTrace[i], -1, -1);
-        continue;
       }
-      result[i] = new StackFrameImpl(
-        matcher.group(2),
-        matcher.group(1) == null ? "(unknown)" : matcher.group(1),
-        Integer.parseInt(matcher.group(3)),
-        Integer.parseInt(matcher.group(4)));
     }
     return result;
   }

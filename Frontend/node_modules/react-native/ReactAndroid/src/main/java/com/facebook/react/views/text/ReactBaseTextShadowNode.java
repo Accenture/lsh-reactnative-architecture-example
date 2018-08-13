@@ -119,7 +119,7 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
                 start, end, new BackgroundColorSpan(textShadowNode.mBackgroundColor)));
       }
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        if (!Float.isNaN(textShadowNode.mLetterSpacing)) {
+        if (textShadowNode.mLetterSpacing != Float.NaN) {
           ops.add(new SetSpanOperation(
             start,
             end,

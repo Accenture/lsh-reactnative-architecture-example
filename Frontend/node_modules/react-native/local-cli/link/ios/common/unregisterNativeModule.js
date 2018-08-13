@@ -1,5 +1,3 @@
-/** @format */
-
 const compact = require('lodash').compact;
 const isInstalledIOS = require('../isInstalled');
 const isInstalledPods = require('../../pods/isInstalled');
@@ -10,14 +8,15 @@ module.exports = function unregisterNativeModule(
   name,
   dependencyConfig,
   projectConfig,
-  otherDependencies,
+  otherDependencies
 ) {
   const isIosInstalled = isInstalledIOS(projectConfig, dependencyConfig);
   const isPodInstalled = isInstalledPods(projectConfig, dependencyConfig);
   if (isIosInstalled) {
     const iOSDependencies = compact(otherDependencies.map(d => d.config.ios));
     unregisterDependencyIOS(dependencyConfig, projectConfig, iOSDependencies);
-  } else if (isPodInstalled) {
+  }
+  else if (isPodInstalled) {
     unregisterDependencyPods(dependencyConfig, projectConfig);
   }
 };

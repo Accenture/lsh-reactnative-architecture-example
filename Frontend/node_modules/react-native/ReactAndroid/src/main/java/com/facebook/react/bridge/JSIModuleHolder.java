@@ -1,30 +1,12 @@
 package com.facebook.react.bridge;
 
-public class JSIModuleHolder {
+/**
+ * Holder class used to register {@link JSIModule} into JSI Bridge.
+ */
+public interface JSIModuleHolder {
 
-  private JSIModule mModule;
-  private final JSIModuleSpec mSpec;
+  Class<? extends JSIModule> getJSIModuleClass();
 
-  public JSIModuleHolder(JSIModuleSpec spec) {
-    mSpec = spec;
-  }
+  <T extends JSIModule> T getJSIModule();
 
-  public JSIModule getJSIModule() {
-    if (mModule == null) {
-      synchronized (this) {
-        if (mModule != null) {
-          return mModule;
-        }
-        mModule = mSpec.getJSIModuleProvider().get();
-        mModule.initialize();
-      }
-    }
-    return mModule;
-  }
-
-  public void notifyJSInstanceDestroy() {
-    if (mModule != null) {
-      mModule.onCatalystInstanceDestroy();
-    }
-  }
 }

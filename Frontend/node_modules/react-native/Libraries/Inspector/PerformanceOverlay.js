@@ -4,42 +4,45 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule PerformanceOverlay
  * @flow
  */
-
 'use strict';
 
-const PerformanceLogger = require('PerformanceLogger');
-const React = require('React');
-const StyleSheet = require('StyleSheet');
-const Text = require('Text');
-const View = require('View');
+var PerformanceLogger = require('PerformanceLogger');
+var React = require('React');
+var StyleSheet = require('StyleSheet');
+var Text = require('Text');
+var View = require('View');
 
 class PerformanceOverlay extends React.Component<{}> {
   render() {
-    const perfLogs = PerformanceLogger.getTimespans();
-    const items = [];
+    var perfLogs = PerformanceLogger.getTimespans();
+    var items = [];
 
-    for (const key in perfLogs) {
+    for (var key in perfLogs) {
       if (perfLogs[key].totalTime) {
-        const unit = key === 'BundleSize' ? 'b' : 'ms';
+        var unit = (key === 'BundleSize') ? 'b' : 'ms';
         items.push(
           <View style={styles.row} key={key}>
             <Text style={[styles.text, styles.label]}>{key}</Text>
             <Text style={[styles.text, styles.totalTime]}>
               {perfLogs[key].totalTime + unit}
             </Text>
-          </View>,
+          </View>
         );
       }
     }
 
-    return <View style={styles.container}>{items}</View>;
+    return (
+      <View style={styles.container}>
+        {items}
+      </View>
+    );
   }
 }
 
-const styles = StyleSheet.create({
+var styles = StyleSheet.create({
   container: {
     height: 100,
     paddingTop: 10,

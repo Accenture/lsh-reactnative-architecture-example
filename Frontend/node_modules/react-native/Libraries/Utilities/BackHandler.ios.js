@@ -7,7 +7,7 @@
  * On Apple TV, this implements back navigation using the TV remote's menu button.
  * On iOS, this just implements a stub.
  *
- * @format
+ * @providesModule BackHandler
  */
 
 'use strict';
@@ -53,18 +53,16 @@ function emptyFunction() {}
  */
 let BackHandler;
 
-if (Platform.isTV) {
+if (Platform.isTVOS) {
   const _tvEventHandler = new TVEventHandler();
-  const _backPressSubscriptions = new Set();
+  var _backPressSubscriptions = new Set();
 
   _tvEventHandler.enable(this, function(cmp, evt) {
     if (evt && evt.eventType === 'menu') {
-      let invokeDefault = true;
-      const subscriptions = Array.from(
-        _backPressSubscriptions.values(),
-      ).reverse();
+      var invokeDefault = true;
+      var subscriptions = Array.from(_backPressSubscriptions.values()).reverse();
 
-      for (let i = 0; i < subscriptions.length; ++i) {
+      for (var i = 0; i < subscriptions.length; ++i) {
         if (subscriptions[i]()) {
           invokeDefault = false;
           break;
@@ -80,9 +78,9 @@ if (Platform.isTV) {
   BackHandler = {
     exitApp: emptyFunction,
 
-    addEventListener: function(
+    addEventListener: function (
       eventName: BackPressEventName,
-      handler: Function,
+      handler: Function
     ): {remove: () => void} {
       _backPressSubscriptions.add(handler);
       return {
@@ -92,12 +90,15 @@ if (Platform.isTV) {
 
     removeEventListener: function(
       eventName: BackPressEventName,
-      handler: Function,
+      handler: Function
     ): void {
       _backPressSubscriptions.delete(handler);
     },
+
   };
+
 } else {
+
   BackHandler = {
     exitApp: emptyFunction,
     addEventListener() {
@@ -107,6 +108,7 @@ if (Platform.isTV) {
     },
     removeEventListener: emptyFunction,
   };
+
 }
 
 module.exports = BackHandler;

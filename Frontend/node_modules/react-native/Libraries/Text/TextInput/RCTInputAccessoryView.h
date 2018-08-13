@@ -14,4 +14,6 @@
 
 - (instancetype)initWithBridge:(RCTBridge *)bridge;
 
+@property (nonatomic, readonly, strong) RCTInputAccessoryViewContent *content;
+
 @end

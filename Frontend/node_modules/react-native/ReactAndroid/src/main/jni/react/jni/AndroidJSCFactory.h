@@ -1,12 +1,8 @@
-// Copyright (c) 2004-present, Facebook, Inc.
-
-// This source code is licensed under the MIT license found in the
-// LICENSE file in the root directory of this source tree.
+// Copyright 2004-present Facebook. All Rights Reserved.
 
 #pragma once
 
 #include <memory>
-#include <cxxreact/JSExecutor.h>
 
 namespace folly {
 
@@ -27,7 +23,7 @@ void injectJSCExecutorAndroidPlatform();
 }
 
 std::unique_ptr<JSExecutorFactory> makeAndroidJSCExecutorFactory(
-    const folly::dynamic& jscConfig);
+    const folly::dynamic& jscConfig, std::function<folly::dynamic(const std::string&)> nativeExtensionsProvider);
 
 }
 }

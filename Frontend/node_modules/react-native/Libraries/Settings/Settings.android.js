@@ -4,13 +4,12 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule Settings
  * @flow
  */
-
 'use strict';
 
-const Settings = {
+var Settings = {
   get(key: string): mixed {
     console.warn('Settings is not yet supported on Android');
     return null;

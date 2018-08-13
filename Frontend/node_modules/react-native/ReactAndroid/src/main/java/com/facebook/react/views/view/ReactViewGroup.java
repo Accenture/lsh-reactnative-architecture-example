@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import com.facebook.infer.annotation.Assertions;
-import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.common.annotations.VisibleForTesting;
 import com.facebook.react.modules.i18nmanager.I18nUtil;
 import com.facebook.react.touch.OnInterceptTouchEventListener;
@@ -669,12 +668,7 @@ public class ReactViewGroup extends ViewGroup implements
       if (rootView != null) {
         rootView.handleException(e);
       } else {
-        if (getContext() instanceof  ReactContext) {
-          ReactContext reactContext = (ReactContext) getContext();
-          reactContext.handleException(new IllegalViewOperationException("StackOverflowException", this, e));
-        } else {
-          throw e;
-        }
+        throw e;
       }
     }
   }

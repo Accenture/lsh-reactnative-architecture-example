@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule TabBarItemIOS
  */
 
 'use strict';
@@ -19,7 +19,9 @@ class DummyTab extends React.Component {
       return <View />;
     }
     return (
-      <View style={[this.props.style, styles.tab]}>{this.props.children}</View>
+      <View style={[this.props.style, styles.tab]}>
+        {this.props.children}
+      </View>
     );
   }
 }
@@ -34,7 +36,7 @@ const styles = StyleSheet.create({
     left: 0,
     borderColor: 'red',
     borderWidth: 1,
-  },
+  }
 });
 
 module.exports = DummyTab;

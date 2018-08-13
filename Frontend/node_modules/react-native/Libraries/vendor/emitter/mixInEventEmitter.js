@@ -4,10 +4,9 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule mixInEventEmitter
  * @flow
  */
-
 'use strict';
 
 const EventEmitter = require('EventEmitter');
@@ -58,7 +57,7 @@ function mixInEventEmitter(cls: Function | Object, types: Object) {
   if (ctor) {
     invariant(
       ctor === Object || ctor === Function,
-      'Mix EventEmitter into a class, not an instance',
+      'Mix EventEmitter into a class, not an instance'
     );
   }
 
@@ -95,7 +94,7 @@ const EventEmitterMixin = {
     return this.__getEventEmitter().addRetroactiveListener(
       eventType,
       listener,
-      context,
+      context
     );
   },
 
@@ -131,7 +130,7 @@ const EventEmitterMixin = {
       this.__eventEmitter = new EventEmitterWithHolding(emitter, holder);
     }
     return this.__eventEmitter;
-  },
+  }
 };
 
 module.exports = mixInEventEmitter;

@@ -7,7 +7,6 @@
 
 #import "RCTInputAccessoryViewManager.h"
 
-#import "RCTInputAccessoryShadowView.h"
 #import "RCTInputAccessoryView.h"
 
 @implementation RCTInputAccessoryViewManager
@@ -24,11 +23,6 @@ RCT_EXPORT_MODULE()
   return [[RCTInputAccessoryView alloc] initWithBridge:self.bridge];
 }
 
-- (RCTShadowView *)shadowView
-{
-  return [RCTInputAccessoryShadowView new];
-}
-
-RCT_REMAP_VIEW_PROPERTY(backgroundColor, inputAccessoryView.backgroundColor, UIColor)
+RCT_REMAP_VIEW_PROPERTY(backgroundColor, content.inputAccessoryView.backgroundColor, UIColor)
 
 @end

@@ -4,6 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
+ * @providesModule ImageResizeMode
  * @flow
  * @format
  */
@@ -12,13 +13,13 @@
 /* $FlowFixMe(>=0.54.0 site=react_native_oss) This comment suppresses an error
  * found when Flow v0.54 was deployed. To see the error delete this comment and
  * run Flow. */
-const keyMirror = require('fbjs/lib/keyMirror');
+var keyMirror = require('fbjs/lib/keyMirror');
 
 /**
  * ImageResizeMode - Enum for different image resizing modes, set via
  * `resizeMode` style property on `<Image>` components.
  */
-const ImageResizeMode = keyMirror({
+var ImageResizeMode = keyMirror({
   /**
    * contain - The image will be resized such that it will be completely
    * visible, contained within the frame of the View.

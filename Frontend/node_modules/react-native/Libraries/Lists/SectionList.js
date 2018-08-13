@@ -4,6 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
+ * @providesModule SectionList
  * @flow
  * @format
  */
@@ -284,7 +285,6 @@ class SectionList<SectionT: SectionBase<any>> extends React.PureComponent<
    */
   recordInteraction() {
     const listRef = this._wrapperListRef && this._wrapperListRef.getListRef();
-    // $FlowFixMe Found when typing ListView
     listRef && listRef.recordInteraction();
   }
 

@@ -40,12 +40,12 @@ struct YGCollectFlexItemsRowValues {
   float sizeConsumedOnCurrentLine;
   float totalFlexGrowFactors;
   float totalFlexShrinkScaledFactors;
-  uint32_t endOfLineIndex;
+  float endOfLineIndex;
   std::vector<YGNodeRef> relativeChildren;
   float remainingFreeSpace;
   // The size of the mainDim for the row after considering size, padding, margin
   // and border of flex items. This is used to calculate maxLineDim after going
-  // through all the rows to decide on the main axis size of owner.
+  // through all the rows to decide on the main axis size of parent.
   float mainDim;
   // The size of the crossDim for the row after considering size, padding,
   // margin and border of flex items. Used for calculating containers crossSize.
@@ -64,10 +64,6 @@ bool YGFloatsEqual(const float a, const float b);
 // as fmax has the same behaviour, but with NAN we cannot use `-ffast-math`
 // compiler flag.
 float YGFloatMax(const float a, const float b);
-
-YGFloatOptional YGFloatOptionalMax(
-    const YGFloatOptional& op1,
-    const YGFloatOptional& op2);
 
 // We need custom min function, since we want that, if one argument is
 // YGUndefined then the min funtion should return the other argument as the min
@@ -90,14 +86,6 @@ bool YGFloatArrayEqual(
   return areEqual;
 }
 
-// This function returns 0 if YGFloatIsUndefined(val) is true and val otherwise
-float YGFloatSanitize(const float& val);
-
-// This function unwraps optional and returns YGUndefined if not defined or
-// op.value otherwise
-// TODO: Get rid off this function
-float YGUnwrapFloatOptional(const YGFloatOptional& op);
-
 YGFlexDirection YGFlexDirectionCross(
     const YGFlexDirection flexDirection,
     const YGDirection direction);
@@ -107,18 +95,17 @@ inline bool YGFlexDirectionIsRow(const YGFlexDirection flexDirection) {
       flexDirection == YGFlexDirectionRowReverse;
 }
 
-inline YGFloatOptional YGResolveValue(const YGValue value, const float ownerSize) {
+inline float YGResolveValue(const YGValue value, const float parentSize) {
   switch (value.unit) {
     case YGUnitUndefined:
     case YGUnitAuto:
-      return YGFloatOptional();
+      return YGUndefined;
     case YGUnitPoint:
-      return YGFloatOptional(value.value);
+      return value.value;
     case YGUnitPercent:
-      return YGFloatOptional(
-          static_cast<float>(value.value * ownerSize * 0.01));
+      return value.value * parentSize * 0.01;
   }
-  return YGFloatOptional();
+  return YGUndefined;
 }
 
 inline bool YGFlexDirectionIsColumn(const YGFlexDirection flexDirection) {
@@ -140,9 +127,8 @@ inline YGFlexDirection YGResolveFlexDirection(
   return flexDirection;
 }
 
-static inline YGFloatOptional YGResolveValueMargin(
+static inline float YGResolveValueMargin(
     const YGValue value,
-    const float ownerSize) {
-  return value.unit == YGUnitAuto ? YGFloatOptional(0)
-                                  : YGResolveValue(value, ownerSize);
+    const float parentSize) {
+  return value.unit == YGUnitAuto ? 0 : YGResolveValue(value, parentSize);
 }

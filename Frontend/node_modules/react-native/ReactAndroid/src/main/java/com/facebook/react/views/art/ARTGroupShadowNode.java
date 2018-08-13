@@ -43,7 +43,7 @@ public class ARTGroupShadowNode extends ARTVirtualNode {
   }
 
   @Override
-  protected ReactShadowNodeImpl copy() {
+  public ReactShadowNodeImpl mutableCopy() {
     return new ARTGroupShadowNode(this);
   }
 

@@ -9,7 +9,6 @@ LOCAL_SRC_FILES := \
   CatalystInstanceImpl.cpp \
   CxxModuleWrapper.cpp \
   JavaModuleWrapper.cpp \
-  JReactMarker.cpp \
   JMessageQueueThread.cpp \
   JSCPerfLogging.cpp \
   JSLoader.cpp \
@@ -19,10 +18,10 @@ LOCAL_SRC_FILES := \
   ModuleRegistryBuilder.cpp \
   NativeArray.cpp \
   NativeCommon.cpp \
-  NativeDeltaClient.cpp \
   NativeMap.cpp \
   OnLoad.cpp \
   ProxyExecutor.cpp \
+  ReactMarker.cpp \
   ReadableNativeArray.cpp \
   ReadableNativeMap.cpp \
   WritableNativeArray.cpp \

@@ -34,7 +34,7 @@ public class ShakeDetector implements SensorEventListener {
 
   private float mAccelerationX, mAccelerationY, mAccelerationZ;
 
-  public interface ShakeListener {
+  public static interface ShakeListener {
     void onShake();
   }
 

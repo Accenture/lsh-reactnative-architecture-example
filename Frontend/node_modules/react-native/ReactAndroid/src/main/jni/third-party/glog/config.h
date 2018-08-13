@@ -49,9 +49,6 @@
 /* define if the compiler implements namespaces */
 #define HAVE_NAMESPACES 1
 
-/* NDK android-16 provides ssize_t pread(int, void*, size_t, off_t) */
-#define HAVE_PREAD 1
-
 /* Define if you have POSIX threads libraries and header files. */
 #define HAVE_PTHREAD 1
 
@@ -135,7 +132,7 @@
 #define PACKAGE_NAME "glog"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "glog 0.3.5"
+#define PACKAGE_STRING "glog 0.3.3"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "glog"
@@ -144,7 +141,7 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "0.3.5"
+#define PACKAGE_VERSION "0.3.3"
 
 /* How to access the PC from a struct ucontext */
 /* #undef PC_FROM_UCONTEXT */
@@ -166,7 +163,7 @@
 #define TEST_SRC_DIR "."
 
 /* Version number of package */
-#define VERSION "0.3.5"
+#define VERSION "0.3.3"
 
 /* Stops putting the code inside the Google namespace */
 #define _END_GOOGLE_NAMESPACE_ }

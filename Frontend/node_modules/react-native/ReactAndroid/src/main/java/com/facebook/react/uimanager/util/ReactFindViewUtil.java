@@ -1,7 +1,4 @@
-// Copyright (c) 2004-present, Facebook, Inc.
-
-// This source code is licensed under the MIT license found in the
-// LICENSE file in the root directory of this source tree.
+// Copyright 2004-present Facebook. All Rights Reserved.
 
 package com.facebook.react.uimanager.util;
 
@@ -132,11 +129,19 @@ public class ReactFindViewUtil {
       }
     }
 
-    for (Map.Entry<OnMultipleViewsFoundListener, Set<String>> entry : mOnMultipleViewsFoundListener.entrySet()) {
-       Set<String> nativeIds = entry.getValue();
-       if (nativeIds != null && nativeIds.contains(nativeId)) {
-            entry.getKey().onViewFound(view, nativeId);
-       }
+    Iterator<Map.Entry<OnMultipleViewsFoundListener, Set<String>>>
+        viewIterator = mOnMultipleViewsFoundListener.entrySet().iterator();
+    while (viewIterator.hasNext()) {
+      Map.Entry<OnMultipleViewsFoundListener, Set<String>> entry =
+          viewIterator.next();
+      Set<String> nativeIds = entry.getValue();
+      if (nativeIds.contains(nativeId)) {
+        entry.getKey().onViewFound(view, nativeId);
+        nativeIds.remove(nativeId); // remove it from list of NativeIds to search for.
+      }
+      if (nativeIds.isEmpty()) {
+        viewIterator.remove();
+      }
     }
   }
 

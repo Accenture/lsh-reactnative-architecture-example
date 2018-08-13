@@ -7,9 +7,6 @@
 
 package com.facebook.react.testing;
 
-import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
-
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -20,38 +17,21 @@ import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactInstanceManagerBuilder;
 import com.facebook.react.ReactRootView;
-import com.facebook.react.bridge.JSIModule;
-import com.facebook.react.bridge.JSIModulePackage;
-import com.facebook.react.bridge.JSIModuleProvider;
-import com.facebook.react.bridge.JSIModuleSpec;
-import com.facebook.react.bridge.JavaScriptContextHolder;
-import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.UIManager;
 import com.facebook.react.common.LifecycleState;
-import com.facebook.react.fabric.FabricUIManager;
-import com.facebook.react.fabric.jsc.FabricJSCBinding;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.modules.core.PermissionAwareActivity;
 import com.facebook.react.modules.core.PermissionListener;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.react.testing.idledetection.ReactBridgeIdleSignaler;
 import com.facebook.react.testing.idledetection.ReactIdleDetectionUtil;
-import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.uimanager.UIImplementationProvider;
-import com.facebook.react.uimanager.UIManagerModule;
-import com.facebook.react.uimanager.ViewManager;
-import com.facebook.react.uimanager.ViewManagerRegistry;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 
 public class ReactAppTestActivity extends FragmentActivity
     implements DefaultHardwareBackBtnHandler, PermissionAwareActivity {
-
-  public static final String EXTRA_IS_FABRIC_TEST = "is_fabric_test";
 
   private static final String DEFAULT_BUNDLE_NAME = "AndroidTestBundle.js";
   private static final int ROOT_VIEW_ID = 8675309;
@@ -82,11 +62,6 @@ public class ReactAppTestActivity extends FragmentActivity
     rootView.addView(mScreenshotingFrameLayout);
 
     mReactRootView = new ReactRootView(this);
-    Intent intent = getIntent();
-    if (intent != null && intent.getBooleanExtra(EXTRA_IS_FABRIC_TEST, false)) {
-      mReactRootView.setIsFabric(true);
-    }
-
     mScreenshotingFrameLayout.addView(mReactRootView);
   }
 
@@ -181,54 +156,11 @@ public class ReactAppTestActivity extends FragmentActivity
     String bundleName,
     boolean useDevSupport,
     UIImplementationProvider uiImplementationProvider) {
-    loadBundle(spec, bundleName, useDevSupport, uiImplementationProvider);
-    renderComponent(appKey, initialProps);
-  }
 
-  public void renderComponent(String appKey) {
-    renderComponent(appKey, null);
-  }
-
-  public void renderComponent(final String appKey, final @Nullable Bundle initialProps) {
     final CountDownLatch currentLayoutEvent = mLayoutEvent = new CountDownLatch(1);
-    runOnUiThread(new Runnable() {
-      @Override
-      public void run() {
-        Assertions.assertNotNull(mReactRootView).getViewTreeObserver().addOnGlobalLayoutListener(
-            new ViewTreeObserver.OnGlobalLayoutListener() {
-              @Override
-              public void onGlobalLayout() {
-                currentLayoutEvent.countDown();
-              }
-            });
-        Assertions.assertNotNull(mReactRootView)
-            .startReactApplication(mReactInstanceManager, appKey, initialProps);
-      }
-    });
-    try {
-      waitForBridgeAndUIIdle();
-      waitForLayout(5000);
-    } catch (InterruptedException e) {
-      throw new RuntimeException("Layout never occurred for component " + appKey, e);
-    }
-  }
-
-  public void loadBundle(
-      ReactInstanceSpecForTest spec,
-      String bundleName,
-      boolean useDevSupport) {
-    loadBundle(spec, bundleName, useDevSupport, null);
-  }
-
-  public void loadBundle(
-      ReactInstanceSpecForTest spec,
-      String bundleName,
-      boolean useDevSupport,
-      UIImplementationProvider uiImplementationProvider) {
-
     mBridgeIdleSignaler = new ReactBridgeIdleSignaler();
 
-    final ReactInstanceManagerBuilder builder =
+    ReactInstanceManagerBuilder builder =
         ReactTestHelper.getReactTestFactory()
             .getReactInstanceManagerBuilder()
             .setApplication(getApplication())
@@ -247,58 +179,20 @@ public class ReactAppTestActivity extends FragmentActivity
         .setUseDeveloperSupport(useDevSupport)
         .setBridgeIdleDebugListener(mBridgeIdleSignaler)
         .setInitialLifecycleState(mLifecycleState)
-        .setJSIModulesPackage(
-            new JSIModulePackage() {
-              @Override
-              public List<JSIModuleSpec> getJSIModules(
-                  final ReactApplicationContext reactApplicationContext,
-                  final JavaScriptContextHolder jsContext) {
-                return Arrays.<JSIModuleSpec>asList(
-                  new JSIModuleSpec() {
-                    @Override
-                    public Class<? extends JSIModule> getJSIModuleClass() {
-                      return UIManager.class;
-                    }
-
-                    @Override
-                    public JSIModuleProvider getJSIModuleProvider() {
-                      return new JSIModuleProvider() {
-                        @Override
-                        public FabricUIManager get() {
-                          List<ViewManager> viewManagers =
-                            mReactInstanceManager.getOrCreateViewManagers(reactApplicationContext);
-                          EventDispatcher eventDispatcher =
-                            reactApplicationContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
-                          FabricUIManager fabricUIManager =
-                            new FabricUIManager(reactApplicationContext, new ViewManagerRegistry(viewManagers), jsContext, eventDispatcher);
-                          new FabricJSCBinding().installFabric(jsContext, fabricUIManager);
-                          return fabricUIManager;
-                        }
-                      };
-                    }
-                  });
-              }})
         .setUIImplementationProvider(uiImplementationProvider);
 
-    final CountDownLatch latch = new CountDownLatch(1);
-    runOnUiThread(new Runnable() {
-      @Override
-      public void run() {
-        mReactInstanceManager = builder.build();
-        mReactInstanceManager.onHostResume(ReactAppTestActivity.this, ReactAppTestActivity.this);
-        latch.countDown();
-      }
-    });
-    try {
-      latch.await(1000, TimeUnit.MILLISECONDS);
-    } catch (InterruptedException e) {
-      throw new RuntimeException(
-          "ReactInstanceManager never finished initializing " + bundleName, e);
-    }
-  }
+    mReactInstanceManager = builder.build();
+    mReactInstanceManager.onHostResume(this, this);
 
-  private ReactInstanceManager getReactInstanceManager() {
-    return mReactInstanceManager;
+    Assertions.assertNotNull(mReactRootView).getViewTreeObserver().addOnGlobalLayoutListener(
+        new ViewTreeObserver.OnGlobalLayoutListener() {
+          @Override
+          public void onGlobalLayout() {
+            currentLayoutEvent.countDown();
+          }
+        });
+    Assertions.assertNotNull(mReactRootView)
+        .startReactApplication(mReactInstanceManager, appKey, initialProps);
   }
 
   public boolean waitForLayout(long millis) throws InterruptedException {

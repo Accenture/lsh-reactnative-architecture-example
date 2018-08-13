@@ -1,7 +1,4 @@
-// Copyright (c) 2004-present, Facebook, Inc.
-
-// This source code is licensed under the MIT license found in the
-// LICENSE file in the root directory of this source tree.
+// Copyright 2004-present Facebook. All Rights Reserved.
 
 #include "NativeToJsBridge.h"
 
@@ -14,7 +11,6 @@
 #include "SystraceSection.h"
 #include "MethodCall.h"
 #include "MessageQueueThread.h"
-#include "ModuleRegistry.h"
 #include "RAMBundleRegistry.h"
 
 #ifdef WITH_FBSYSTRACE
@@ -198,11 +194,13 @@ bool NativeToJsBridge::isInspectable() {
   return m_executor->isInspectable();
 }
 
+#ifdef WITH_JSC_MEMORY_PRESSURE
 void NativeToJsBridge::handleMemoryPressure(int pressureLevel) {
   runOnExecutorQueue([=] (JSExecutor* executor) {
     executor->handleMemoryPressure(pressureLevel);
   });
 }
+#endif
 
 void NativeToJsBridge::destroy() {
   // All calls made through runOnExecutorQueue have an early exit if

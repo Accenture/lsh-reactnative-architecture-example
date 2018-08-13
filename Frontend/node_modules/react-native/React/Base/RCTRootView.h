@@ -30,12 +30,7 @@ typedef NS_ENUM(NSInteger, RCTRootViewSizeFlexibility) {
  * after the application has loaded. This is used to hide the `loadingView`, and
  * is a good indicator that the application is ready to use.
  */
-#if defined(__cplusplus)
-extern "C"
-#else
-extern
-#endif
-NSString *const RCTContentDidAppearNotification;
+extern NSString *const RCTContentDidAppearNotification;
 
 /**
  * Native view used to host React-managed views within the app. Can be used just

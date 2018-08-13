@@ -4,21 +4,20 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule StyleSheetPropType
  * @flow
  */
-
 'use strict';
 
-const createStrictShapeTypeChecker = require('createStrictShapeTypeChecker');
-const flattenStyle = require('flattenStyle');
+var createStrictShapeTypeChecker = require('createStrictShapeTypeChecker');
+var flattenStyle = require('flattenStyle');
 
-function StyleSheetPropType(shape: {
-  [key: string]: ReactPropsCheckType,
-}): ReactPropsCheckType {
-  const shapePropType = createStrictShapeTypeChecker(shape);
+function StyleSheetPropType(
+  shape: {[key: string]: ReactPropsCheckType}
+): ReactPropsCheckType {
+  var shapePropType = createStrictShapeTypeChecker(shape);
   return function(props, propName, componentName, location?, ...rest) {
-    let newProps = props;
+    var newProps = props;
     if (props[propName]) {
       // Just make a dummy prop object with only the flattened style
       newProps = {};

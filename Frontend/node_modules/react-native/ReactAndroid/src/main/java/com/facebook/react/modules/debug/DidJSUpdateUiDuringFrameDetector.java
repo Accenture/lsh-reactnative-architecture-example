@@ -43,11 +43,6 @@ public class DidJSUpdateUiDuringFrameDetector implements NotThreadSafeBridgeIdle
   }
 
   @Override
-  public synchronized void onBridgeDestroyed() {
-    // do nothing
-  }
-
-  @Override
   public synchronized void onViewHierarchyUpdateEnqueued() {
     mViewHierarchyUpdateEnqueuedEvents.add(System.nanoTime());
   }

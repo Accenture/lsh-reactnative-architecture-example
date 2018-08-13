@@ -4,13 +4,18 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
- * @flow
+ * @providesModule clamp
+ * @typechecks
  */
-
 'use strict';
 
-function clamp(min: number, value: number, max: number): number {
+/**
+ * @param {number} min
+ * @param {number} value
+ * @param {number} max
+ * @return {number}
+ */
+function clamp(min, value, max) {
   if (value < min) {
     return min;
   }

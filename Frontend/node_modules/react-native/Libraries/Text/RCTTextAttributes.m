@@ -21,14 +21,12 @@ NSString *const RCTTextAttributesTagAttributeName = @"RCTTextAttributesTagAttrib
   if (self = [super init]) {
     _fontSize = NAN;
     _letterSpacing = NAN;
-    _lineHeight = NAN;
     _textDecorationStyle = NSUnderlineStyleSingle;
     _fontSizeMultiplier = NAN;
     _alignment = NSTextAlignmentNatural;
     _baseWritingDirection = NSWritingDirectionNatural;
     _textShadowRadius = NAN;
     _opacity = NAN;
-    _textTransform = RCTTextTransformUndefined;
   }
 
   return self;
@@ -74,7 +72,6 @@ NSString *const RCTTextAttributesTagAttributeName = @"RCTTextAttributesTagAttrib
   _isHighlighted = textAttributes->_isHighlighted || _isHighlighted;  // *
   _tag = textAttributes->_tag ?: _tag;
   _layoutDirection = textAttributes->_layoutDirection != UIUserInterfaceLayoutDirectionLeftToRight ? textAttributes->_layoutDirection : _layoutDirection;
-  _textTransform = textAttributes->_textTransform != RCTTextTransformUndefined ? textAttributes->_textTransform : _textTransform;
 }
 
 - (NSDictionary<NSAttributedStringKey, id> *)effectiveTextAttributes
@@ -216,21 +213,6 @@ NSString *const RCTTextAttributesTagAttributeName = @"RCTTextAttributesTagAttrib
   return effectiveBackgroundColor ?: [UIColor clearColor];
 }
 
-- (NSString *)applyTextAttributesToText:(NSString *)text
-{
-  switch (_textTransform) {
-    case RCTTextTransformUndefined:
-    case RCTTextTransformNone:
-      return text;
-    case RCTTextTransformLowercase:
-      return [text lowercaseString];
-    case RCTTextTransformUppercase:
-      return [text uppercaseString];
-    case RCTTextTransformCapitalize:
-      return [text capitalizedString];
-  }
-}
-
 - (RCTTextAttributes *)copyWithZone:(NSZone *)zone
 {
   RCTTextAttributes *textAttributes = [RCTTextAttributes new];
@@ -280,8 +262,7 @@ NSString *const RCTTextAttributesTagAttributeName = @"RCTTextAttributesTagAttrib
     // Special
     RCTTextAttributesCompareOthers(_isHighlighted) &&
     RCTTextAttributesCompareObjects(_tag) &&
-    RCTTextAttributesCompareOthers(_layoutDirection) &&
-    RCTTextAttributesCompareOthers(_textTransform);
+    RCTTextAttributesCompareOthers(_layoutDirection);
 }
 
 @end

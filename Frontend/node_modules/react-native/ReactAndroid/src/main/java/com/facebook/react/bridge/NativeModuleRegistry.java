@@ -141,8 +141,7 @@ public class NativeModuleRegistry {
   }
 
   public <T extends NativeModule> T getModule(Class<T> moduleInterface) {
-    return (T) Assertions.assertNotNull(
-        mModules.get(moduleInterface), moduleInterface.getSimpleName()).getModule();
+    return (T) Assertions.assertNotNull(mModules.get(moduleInterface)).getModule();
   }
 
   public List<NativeModule> getAllModules() {

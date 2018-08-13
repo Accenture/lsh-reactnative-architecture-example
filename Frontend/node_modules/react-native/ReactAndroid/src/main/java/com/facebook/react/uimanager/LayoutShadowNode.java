@@ -1,7 +1,4 @@
-// Copyright (c) 2004-present, Facebook, Inc.
-
-// This source code is licensed under the MIT license found in the
-// LICENSE file in the root directory of this source tree.
+// Copyright 2004-present Facebook. All Rights Reserved.
 
 package com.facebook.react.uimanager;
 
@@ -81,7 +78,7 @@ public class LayoutShadowNode extends ReactShadowNodeImpl {
   }
 
   @Override
-  protected LayoutShadowNode copy() {
+  public LayoutShadowNode mutableCopy() {
     return new LayoutShadowNode(this);
   }
 
@@ -318,10 +315,6 @@ public class LayoutShadowNode extends ReactShadowNodeImpl {
         setFlexWrap(YogaWrap.WRAP);
         break;
       }
-      case "wrap-reverse": {
-        setFlexWrap(YogaWrap.WRAP_REVERSE);
-        break;
-      }
       default: {
         throw new JSApplicationIllegalArgumentException(
             "invalid value for flexWrap: " + flexWrap);
@@ -530,6 +523,7 @@ public class LayoutShadowNode extends ReactShadowNodeImpl {
     if (isVirtual()) {
       return;
     }
+
     if (overflow == null) {
       setOverflow(YogaOverflow.VISIBLE);
       return;

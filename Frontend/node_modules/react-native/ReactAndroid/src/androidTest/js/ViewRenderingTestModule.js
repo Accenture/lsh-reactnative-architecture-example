@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule ViewRenderingTestModule
  */
 
 'use strict';
@@ -27,7 +27,9 @@ class ViewSampleApp extends React.Component {
   state = {};
 
   render() {
-    return <View style={styles.view} collapsable={false} />;
+    return (
+      <View style={styles.view} collapsable={false}/>
+    );
   }
 }
 
@@ -39,10 +41,7 @@ class MarginSampleApp extends React.Component {
   render() {
     updateMargins = this.setState.bind(this, {margin: 15});
     return (
-      <View
-        style={{margin: this.state.margin, marginLeft: 20}}
-        collapsable={false}
-      />
+      <View style={{margin: this.state.margin, marginLeft: 20}} collapsable={false}/>
     );
   }
 }
@@ -50,13 +49,8 @@ class MarginSampleApp extends React.Component {
 class BorderSampleApp extends React.Component {
   render() {
     return (
-      <View
-        style={{borderLeftWidth: 20, borderWidth: 5, backgroundColor: 'blue'}}
-        collapsable={false}>
-        <View
-          style={{backgroundColor: 'red', width: 20, height: 20}}
-          collapsable={false}
-        />
+      <View style={{borderLeftWidth: 20, borderWidth: 5, backgroundColor: 'blue'}} collapsable={false}>
+        <View style={{backgroundColor: 'red', width: 20, height: 20}} collapsable={false}/>
       </View>
     );
   }
@@ -71,9 +65,11 @@ class TransformSampleApp extends React.Component {
         {rotate: '15deg'},
         {scaleX: 5},
         {scaleY: 10},
-      ],
+      ]
     };
-    return <View style={style} collapsable={false} />;
+    return (
+      <View style={style} collapsable={false}/>
+    );
   }
 }
 
@@ -97,7 +93,7 @@ var ViewRenderingTestModule = {
 
 BatchedBridge.registerCallableModule(
   'ViewRenderingTestModule',
-  ViewRenderingTestModule,
+  ViewRenderingTestModule
 );
 
 module.exports = ViewRenderingTestModule;

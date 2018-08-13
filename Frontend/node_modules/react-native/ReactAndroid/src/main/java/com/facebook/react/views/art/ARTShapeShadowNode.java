@@ -72,7 +72,7 @@ public class ARTShapeShadowNode extends ARTVirtualNode {
   }
 
   @Override
-  protected ARTShapeShadowNode copy() {
+  public ARTShapeShadowNode mutableCopy() {
     return new ARTShapeShadowNode(this);
   }
 

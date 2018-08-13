@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule TestJSLocaleModule
  */
 
 'use strict';
@@ -21,6 +21,9 @@ var TestJSLocaleModule = {
   },
 };
 
-BatchedBridge.registerCallableModule('TestJSLocaleModule', TestJSLocaleModule);
+BatchedBridge.registerCallableModule(
+  'TestJSLocaleModule',
+  TestJSLocaleModule
+);
 
 module.exports = TestJSLocaleModule;

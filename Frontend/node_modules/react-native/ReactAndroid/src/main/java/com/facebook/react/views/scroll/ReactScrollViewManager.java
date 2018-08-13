@@ -9,8 +9,6 @@ package com.facebook.react.views.scroll;
 
 import android.annotation.TargetApi;
 import android.graphics.Color;
-import android.support.v4.view.ViewCompat;
-
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.module.annotations.ReactModule;
@@ -23,9 +21,8 @@ import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.annotations.ReactPropGroup;
 import com.facebook.yoga.YogaConstants;
-
-import javax.annotation.Nullable;
 import java.util.Map;
+import javax.annotation.Nullable;
 
 /**
  * View manager for {@link ReactScrollView} components.
@@ -122,11 +119,6 @@ public class ReactScrollViewManager
   @ReactProp(name = "overScrollMode")
   public void setOverScrollMode(ReactScrollView view, String value) {
     view.setOverScrollMode(ReactScrollViewHelper.parseOverScrollMode(value));
-  }
-
-  @ReactProp(name = "nestedScrollEnabled")
-  public void setNestedScrollEnabled(ReactScrollView view, boolean value) {
-    ViewCompat.setNestedScrollingEnabled(view, value);
   }
 
   @Override

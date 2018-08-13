@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule UIManagerTestModule
  */
 
 'use strict';
@@ -35,25 +35,16 @@ var FlexTestApp = createReactClass({
       left: 10,
       width: 50,
       height: 60,
-    },
+    }
   }),
   render: function() {
     return (
-      <View
-        style={this._styles.container}
-        testID="container"
-        collapsable={false}>
-        <View
-          style={[this._styles.child, {backgroundColor: '#ff0000'}]}
-          collapsable={false}
-        />
-        <View
-          style={[this._styles.child, {backgroundColor: '#0000ff'}]}
-          collapsable={false}
-        />
+      <View style={this._styles.container} testID="container" collapsable={false}>
+        <View style={[this._styles.child, {backgroundColor: '#ff0000'}]} collapsable={false}/>
+        <View style={[this._styles.child, {backgroundColor: '#0000ff'}]} collapsable={false}/>
       </View>
     );
-  },
+  }
 });
 
 var FlexWithText = createReactClass({
@@ -75,17 +66,14 @@ var FlexWithText = createReactClass({
   }),
   render: function() {
     return (
-      <View
-        style={this._styles.container}
-        testID="container"
-        collapsable={false}>
+      <View style={this._styles.container} testID="container" collapsable={false}>
         <View style={this._styles.row} collapsable={false}>
           <Text style={this._styles.inner}>Hello</Text>
           <Text style={this._styles.inner}>World</Text>
         </View>
       </View>
     );
-  },
+  }
 });
 
 var AbsolutePositionTestApp = createReactClass({
@@ -97,17 +85,11 @@ var AbsolutePositionTestApp = createReactClass({
       left: 10,
       width: 50,
       height: 60,
-    },
+    }
   }),
   render: function() {
-    return (
-      <View
-        style={this._styles.absolute}
-        testID="absolute"
-        collapsable={false}
-      />
-    );
-  },
+    return <View style={this._styles.absolute} testID="absolute" collapsable={false}/>;
+  }
 });
 
 var AbsolutePositionBottomRightTestApp = createReactClass({
@@ -123,18 +105,15 @@ var AbsolutePositionBottomRightTestApp = createReactClass({
       right: 10,
       width: 50,
       height: 60,
-    },
+    }
   }),
   render: function() {
     return (
-      <View
-        style={this._styles.container}
-        testID="container"
-        collapsable={false}>
-        <View style={this._styles.absolute} collapsable={false} />
+      <View style={this._styles.container} testID="container" collapsable={false}>
+        <View style={this._styles.absolute} collapsable={false}/>
       </View>
     );
-  },
+  }
 });
 
 var CenteredTextView = createReactClass({
@@ -156,13 +135,11 @@ var CenteredTextView = createReactClass({
     return (
       <View collapsable={false}>
         <View style={this._styles.parent} collapsable={false}>
-          <Text style={this._styles.text} testID="text">
-            {this.props.text}
-          </Text>
+          <Text style={this._styles.text} testID="text">{this.props.text}</Text>
         </View>
       </View>
     );
-  },
+  }
 });
 
 var flushUpdatePositionInList = null;
@@ -174,11 +151,11 @@ var UpdatePositionInListTestApp = createReactClass({
     },
     active: {
       height: 50,
-    },
+    }
   }),
   getInitialState: function() {
-    flushUpdatePositionInList = () => this.setState({active: true});
-    return {active: false};
+    flushUpdatePositionInList = () => this.setState({ active: true });
+    return { active: false };
   },
   render: function() {
     return (
@@ -191,10 +168,10 @@ var UpdatePositionInListTestApp = createReactClass({
           ]}
           collapsable={false}
         />
-        <View style={this._styles.element} collapsable={false} />
+        <View style={this._styles.element} collapsable={false}/>
       </View>
     );
-  },
+  }
 });
 
 var UIManagerTestModule = {
@@ -218,12 +195,12 @@ var UIManagerTestModule = {
   },
   flushUpdatePositionInList: function() {
     flushUpdatePositionInList();
-  },
+  }
 };
 
 BatchedBridge.registerCallableModule(
   'UIManagerTestModule',
-  UIManagerTestModule,
+  UIManagerTestModule
 );
 
 module.exports = UIManagerTestModule;

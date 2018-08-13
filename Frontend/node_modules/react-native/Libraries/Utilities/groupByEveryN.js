@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule groupByEveryN
  * @flow
  */
 
@@ -26,10 +26,10 @@
 'use strict';
 
 function groupByEveryN<T>(array: Array<T>, n: number): Array<Array<?T>> {
-  const result = [];
-  let temp = [];
+  var result = [];
+  var temp = [];
 
-  for (let i = 0; i < array.length; ++i) {
+  for (var i = 0; i < array.length; ++i) {
     if (i > 0 && i % n === 0) {
       result.push(temp);
       temp = [];

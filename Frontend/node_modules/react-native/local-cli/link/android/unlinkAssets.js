@@ -3,8 +3,6 @@
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
- *
- * @format
  */
 
 const fs = require('fs-extra');
@@ -20,12 +18,8 @@ const groupFilesByType = require('../groupFilesByType');
 module.exports = function unlinkAssetsAndroid(files, project) {
   const assets = groupFilesByType(files);
 
-  (assets.font || []).forEach(file => {
-    const filePath = path.join(
-      project.assetsPath,
-      'fonts',
-      path.basename(file),
-    );
+  (assets.font || []).forEach((file) => {
+    const filePath = path.join(project.assetsPath, 'fonts', path.basename(file));
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
     }

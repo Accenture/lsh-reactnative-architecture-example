@@ -4,17 +4,16 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule StyleSheetValidation
  * @flow
  */
-
 'use strict';
 
-const ImageStylePropTypes = require('ImageStylePropTypes');
-const TextStylePropTypes = require('TextStylePropTypes');
-const ViewStylePropTypes = require('ViewStylePropTypes');
+var ImageStylePropTypes = require('ImageStylePropTypes');
+var TextStylePropTypes = require('TextStylePropTypes');
+var ViewStylePropTypes = require('ViewStylePropTypes');
 
-const invariant = require('fbjs/lib/invariant');
+var invariant = require('fbjs/lib/invariant');
 
 // Hardcoded because this is a legit case but we don't want to load it from
 // a private API. We might likely want to unify style sheet creation with how it
@@ -28,13 +27,12 @@ class StyleSheetValidation {
       return;
     }
     if (allStylePropTypes[prop] === undefined) {
-      const message1 = '"' + prop + '" is not a valid style property.';
-      const message2 =
-        '\nValid style props: ' +
+      var message1 = '"' + prop + '" is not a valid style property.';
+      var message2 = '\nValid style props: ' +
         JSON.stringify(Object.keys(allStylePropTypes).sort(), null, '  ');
       styleError(message1, style, caller, message2);
     }
-    const error = allStylePropTypes[prop](
+    var error = allStylePropTypes[prop](
       style,
       prop,
       caller,
@@ -51,35 +49,27 @@ class StyleSheetValidation {
     if (!__DEV__) {
       return;
     }
-    for (const prop in styles[name]) {
-      StyleSheetValidation.validateStyleProp(
-        prop,
-        styles[name],
-        'StyleSheet ' + name,
-      );
+    for (var prop in styles[name]) {
+      StyleSheetValidation.validateStyleProp(prop, styles[name], 'StyleSheet ' + name);
     }
   }
 
   static addValidStylePropTypes(stylePropTypes) {
-    for (const key in stylePropTypes) {
+    for (var key in stylePropTypes) {
       allStylePropTypes[key] = stylePropTypes[key];
     }
   }
 }
 
-const styleError = function(message1, style, caller?, message2?) {
+var styleError = function(message1, style, caller?, message2?) {
   invariant(
     false,
-    message1 +
-      '\n' +
-      (caller || '<<unknown>>') +
-      ': ' +
-      JSON.stringify(style, null, '  ') +
-      (message2 || ''),
+    message1 + '\n' + (caller || '<<unknown>>') + ': ' +
+    JSON.stringify(style, null, '  ') + (message2 || '')
   );
 };
 
-const allStylePropTypes = {};
+var allStylePropTypes = {};
 
 StyleSheetValidation.addValidStylePropTypes(ImageStylePropTypes);
 StyleSheetValidation.addValidStylePropTypes(TextStylePropTypes);

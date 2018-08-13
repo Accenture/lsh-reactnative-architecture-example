@@ -7,7 +7,6 @@
 
 package com.facebook.react.views.progressbar;
 
-import com.facebook.react.uimanager.ReactShadowNodeImpl;
 import javax.annotation.Nullable;
 
 import java.util.HashSet;
@@ -42,7 +41,7 @@ public class ProgressBarShadowNode extends LayoutShadowNode implements YogaMeasu
     mHeight = new SparseIntArray();
     mWidth = new SparseIntArray();
     mMeasured = new HashSet<>();
-    initMeasureFunction();
+    setMeasureFunction(this);
   }
 
   public ProgressBarShadowNode(ProgressBarShadowNode node) {
@@ -50,28 +49,11 @@ public class ProgressBarShadowNode extends LayoutShadowNode implements YogaMeasu
     mWidth = node.mWidth.clone();
     mHeight = node.mHeight.clone();
     mMeasured = new HashSet<>(node.mMeasured);
-  }
-
-  @Override
-  public ReactShadowNodeImpl mutableCopyWithNewChildren(long instanceHandle) {
-    ProgressBarShadowNode node = (ProgressBarShadowNode) super.mutableCopyWithNewChildren(instanceHandle);
-    node.initMeasureFunction();
-    return node;
-  }
-
-  private void initMeasureFunction() {
     setMeasureFunction(this);
   }
 
   @Override
-  public ReactShadowNodeImpl mutableCopy(long instanceHandle) {
-    ProgressBarShadowNode node = (ProgressBarShadowNode) super.mutableCopy(instanceHandle);
-    node.initMeasureFunction();
-    return node;
-  }
-
-  @Override
-  public ProgressBarShadowNode copy() {
+  public ProgressBarShadowNode mutableCopy() {
     return new ProgressBarShadowNode(this);
   }
 

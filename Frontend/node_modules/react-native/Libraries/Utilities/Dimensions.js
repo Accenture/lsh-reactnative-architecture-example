@@ -4,21 +4,20 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @format
+ * @providesModule Dimensions
  * @flow
  */
-
 'use strict';
 
-const EventEmitter = require('EventEmitter');
-const Platform = require('Platform');
-const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
+var EventEmitter = require('EventEmitter');
+var Platform = require('Platform');
+var RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
-const invariant = require('fbjs/lib/invariant');
+var invariant = require('fbjs/lib/invariant');
 
-const eventEmitter = new EventEmitter();
-let dimensionsInitialized = false;
-const dimensions = {};
+var eventEmitter = new EventEmitter();
+var dimensionsInitialized = false;
+var dimensions = {};
 class Dimensions {
   /**
    * This should only be called from native code by sending the
@@ -26,7 +25,7 @@ class Dimensions {
    *
    * @param {object} dims Simple string-keyed object of dimensions to set
    */
-  static set(dims: {[key: string]: any}): void {
+  static set(dims: {[key:string]: any}): void {
     // We calculate the window dimensions in JS so that we don't encounter loss of
     // precision in transferring the dimensions (which could be non-integers) over
     // the bridge.
@@ -65,7 +64,7 @@ class Dimensions {
       // Don't fire 'change' the first time the dimensions are set.
       eventEmitter.emit('change', {
         window: dimensions.window,
-        screen: dimensions.screen,
+        screen: dimensions.screen
       });
     } else {
       dimensionsInitialized = true;
@@ -100,11 +99,13 @@ class Dimensions {
    *   are the same as the return values of `Dimensions.get('window')` and
    *   `Dimensions.get('screen')`, respectively.
    */
-  static addEventListener(type: string, handler: Function) {
+  static addEventListener(
+    type: string,
+    handler: Function
+  ) {
     invariant(
       type === 'change',
-      'Trying to subscribe to unknown event: "%s"',
-      type,
+      'Trying to subscribe to unknown event: "%s"', type
     );
     eventEmitter.addListener(type, handler);
   }
@@ -112,20 +113,19 @@ class Dimensions {
   /**
    * Remove an event handler.
    */
-  static removeEventListener(type: string, handler: Function) {
+  static removeEventListener(
+    type: string,
+    handler: Function
+  ) {
     invariant(
       type === 'change',
-      'Trying to remove listener for unknown event: "%s"',
-      type,
+      'Trying to remove listener for unknown event: "%s"', type
     );
     eventEmitter.removeListener(type, handler);
   }
 }
 
-let dims: ?{[key: string]: any} =
-  global.nativeExtensions &&
-  global.nativeExtensions.DeviceInfo &&
-  global.nativeExtensions.DeviceInfo.Dimensions;
+let dims: ?{[key: string]: any} = global.nativeExtensions && global.nativeExtensions.DeviceInfo && global.nativeExtensions.DeviceInfo.Dimensions;
 let nativeExtensionsEnabled = true;
 if (!dims) {
   const DeviceInfo = require('DeviceInfo');
@@ -133,10 +133,7 @@ if (!dims) {
   nativeExtensionsEnabled = false;
 }
 
-invariant(
-  dims,
-  'Either DeviceInfo native extension or DeviceInfo Native Module must be registered',
-);
+invariant(dims, 'Either DeviceInfo native extension or DeviceInfo Native Module must be registered');
 Dimensions.set(dims);
 if (!nativeExtensionsEnabled) {
   RCTDeviceEventEmitter.addListener('didUpdateDimensions', function(update) {

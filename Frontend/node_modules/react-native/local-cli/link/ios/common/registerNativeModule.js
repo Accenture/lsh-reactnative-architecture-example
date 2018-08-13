@@ -1,5 +1,3 @@
-/** @format */
-
 const registerDependencyIOS = require('../registerNativeModule');
 const registerDependencyPods = require('../../pods/registerNativeModule');
 
@@ -7,11 +5,12 @@ module.exports = function registerNativeModule(
   name,
   dependencyConfig,
   params,
-  projectConfig,
+  projectConfig
 ) {
   if (projectConfig.podfile && dependencyConfig.podspec) {
     registerDependencyPods(name, dependencyConfig, projectConfig);
-  } else {
+  }
+  else {
     registerDependencyIOS(dependencyConfig, projectConfig);
   }
 };

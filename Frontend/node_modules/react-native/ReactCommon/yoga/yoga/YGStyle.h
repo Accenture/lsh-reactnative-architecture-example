@@ -6,7 +6,6 @@
  */
 
 #pragma once
-#include "YGFloatOptional.h"
 #include "Yoga-internal.h"
 #include "Yoga.h"
 
@@ -21,9 +20,9 @@ struct YGStyle {
   YGWrap flexWrap;
   YGOverflow overflow;
   YGDisplay display;
-  YGFloatOptional flex;
-  YGFloatOptional flexGrow;
-  YGFloatOptional flexShrink;
+  float flex;
+  float flexGrow;
+  float flexShrink;
   YGValue flexBasis;
   std::array<YGValue, YGEdgeCount> margin;
   std::array<YGValue, YGEdgeCount> position;
@@ -32,7 +31,7 @@ struct YGStyle {
   std::array<YGValue, 2> dimensions;
   std::array<YGValue, 2> minDimensions;
   std::array<YGValue, 2> maxDimensions;
-  YGFloatOptional aspectRatio;
+  float aspectRatio;
 
   YGStyle();
   // Yoga specific properties, not compatible with flexbox specification
