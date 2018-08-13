@@ -2,7 +2,8 @@
 Liquid Studio Helsinki Mobile Architecture reference application
 
 [![Code Style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-https://build.appcenter.ms/v0.1/apps/899121a4-f405-4734-9e1f-ddc8a6e158f5/branches/master/badge
+[![Build Status: ](https://build.appcenter.ms/v0.1/apps/899121a4-f405-4734-9e1f-ddc8a6e158f5/branches/master/badge
+)]
 
 
 ### Salient Features
