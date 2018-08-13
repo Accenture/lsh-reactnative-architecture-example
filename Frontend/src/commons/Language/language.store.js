@@ -11,7 +11,7 @@ export default class LanguageStore {
   key = 0;
 
   @action
-  setCurrentLanguage(langKey) {
+  setCurrentLanguage(langKey: string) {
     this.locale = langKey;
     setLocale(this.locale);
     this.updateApp();

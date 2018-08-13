@@ -24,7 +24,7 @@ export default class HomeScreenStore {
   }
 
   @action
-  setPhotos(data) {
+  setPhotos(data: {}) {
     this.cameraData = data;
   }
 }

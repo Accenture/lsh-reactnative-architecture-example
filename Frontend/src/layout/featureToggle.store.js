@@ -8,7 +8,7 @@ export default class FeatureToggleStore {
   featureData = {};
 
   @action
-  isFeatureEnabled(featureName) {
+  isFeatureEnabled(featureName: string) {
     this.featureData = features;
     return this.featureData[featureName];
   }
