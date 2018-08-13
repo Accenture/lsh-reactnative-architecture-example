@@ -2,6 +2,7 @@
 
 exports[`Tests login form component matches snapshot 1`] = `
 <inject-Layout-with-featureToggleStore
+  featureName="Auth"
   headerText="AUTH_title"
   hideDrawer={true}
   onPress={[Function]}

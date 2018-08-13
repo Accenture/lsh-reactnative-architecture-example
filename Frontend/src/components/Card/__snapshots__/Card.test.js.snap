@@ -21,5 +21,7 @@ exports[`Tests card component matches snapshot 1`] = `
       "shadowRadius": 2,
     }
   }
-/>
+>
+  <Component />
+</Component>
 `;

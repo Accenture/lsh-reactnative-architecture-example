@@ -31,6 +31,8 @@ exports[`Tests button component matches snapshot 1`] = `
         "paddingTop": 10,
       }
     }
-  />
+  >
+    <Component />
+  </Text>
 </TouchableOpacity>
 `;

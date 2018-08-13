@@ -13,5 +13,7 @@ exports[`Tests card section component matches snapshot 1`] = `
       "position": "relative",
     }
   }
-/>
+>
+  <Component />
+</Component>
 `;
