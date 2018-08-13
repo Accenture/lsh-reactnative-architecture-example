@@ -34,6 +34,18 @@ export default class HomeScreen extends Component {
 
   render() {
     this.props.homeStore.getPhotos();
+    const data = [
+      { key: 'a' },
+      { key: 'b' },
+      { key: 'c' },
+      { key: 'd' },
+      { key: 'e' },
+      { key: 'f' },
+      { key: 'g' },
+      { key: 'h' },
+      { key: 'i' },
+      { key: 'j' },
+    ];
     return (
       <Layout
         headerText={translate('HOME_title')}
@@ -44,7 +56,7 @@ export default class HomeScreen extends Component {
           <Card>
             <FlatList
               contentContainerStyle={styles.listStyle}
-              data={this.props.homeStore.photos}
+              data={data}
               renderItem={({ item }) => this.renderItem(item)}
               keyExtractor={(item, index) => index.toString()}
             />
