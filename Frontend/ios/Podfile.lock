@@ -12,7 +12,7 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.4)
-  - JWT (3.0.0-beta.10):
+  - JWT (3.0.0-beta.11):
     - Base64 (~> 1.1.2)
   - React (0.55.4):
     - React/Core (= 0.55.4)
@@ -97,7 +97,7 @@ SPEC CHECKSUMS:
   DoubleConversion: e22e0762848812a87afd67ffda3998d9ef29170c
   Folly: 211775e49d8da0ca658aebc8eab89d642935755c
   glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
-  JWT: 9d03743102a8a7e80068f390a9d35bb26b689c67
+  JWT: 05028b9624591bba9681bb57df2c5f95fa258bad
   React: aa2040dbb6f317b95314968021bd2888816e03d5
   react-native-camera: 68ad5143d2d0636236d46c7de8d2a6455ca52a36
   SSZipArchive: 51a800ebb77f95a8329b6ced1faaff394b47f509

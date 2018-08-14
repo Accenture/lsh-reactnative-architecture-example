@@ -11,7 +11,7 @@
     "lint-watch": "esw -w --changed src/**",
     "flow": "flow",
     "flow-stop": "flow stop",
-    "start-ios": "react-native run-ios && npm run lint-watch",
+    "start-ios": "react-native run-ios",
     "start-android": "react-native run-android",
     "pretty": "prettier --write \"src/**/*.js\"",
     "precommit": "lint-staged"

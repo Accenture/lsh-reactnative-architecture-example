@@ -20,7 +20,7 @@ Liquid Studio Helsinki Mobile Architecture reference application
 * Customized flexible components
 * Localization with I18n (default locale set to 'fi')
 * CocoaPods for ios
-* Bugsnag crashlytics and error reporting
+* AppCenter crashlytics and error reporting
 * Feature Toggling
 
 ### Project Structure
