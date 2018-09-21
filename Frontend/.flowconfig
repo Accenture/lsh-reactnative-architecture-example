@@ -28,7 +28,6 @@ node_modules/react-native/flow-github/
 
 [options]
 emoji=true
-esproposal.decorators=ignore
 
 module.system=haste
 
