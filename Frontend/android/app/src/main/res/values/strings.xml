@@ -1,4 +1,3 @@
 <resources>
-    <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">T-_OH8yyGDFY-eLW63pCmmFMDrUZ1e9448ef-1e20-4d38-ac97-32777d12a606</string>
     <string name="app_name">Frontend</string>
 </resources>
