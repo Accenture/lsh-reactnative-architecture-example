@@ -97,6 +97,24 @@ rm -rf ios/build/
 rm -rf ~/.rncache
 yarn && yarn start-ios
 ````
+OR
+
+````
+Run yarn react-native upgrade and answer the questions as Y
+````
+
+* Bundling failing at decorators:
+Run yarn add  babel-plugin-transform-decorators-legacy babel-plugin-transform-class-properties
+and update .babelrc as plugins
+`````
+"plugins": [
+    "transform-decorators-legacy"
+  ],
+`````
+
+* undefined is not an object (evaluating 'CameraManager.Aspect')
+Run yarn add react-native-camera && yarn react-native link react-native-camera
+and follow the steps as provided in https://github.com/react-native-community/react-native-camera#ios
 
 * Build Failed on Appcenter
 
