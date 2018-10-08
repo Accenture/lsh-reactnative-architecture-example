@@ -66,6 +66,7 @@ type TrackedTextFeature = {
 type RecordingOptions = {
   maxDuration?: number,
   maxFileSize?: number,
+  orientation?: Orientation,
   quality?: number | string,
   codec?: string,
   mute?: boolean,
@@ -92,6 +93,7 @@ type PropsType = typeof View.props & {
   whiteBalance?: number | string,
   faceDetectionLandmarks?: number,
   autoFocus?: string | boolean | number,
+  autoFocusPointOfInterest?: { x: number, y: number },
   faceDetectionClassifications?: number,
   onFacesDetected?: ({ faces: Array<TrackedFaceFeature> }) => void,
   onTextRecognized?: ({ textBlocks: Array<TrackedTextFeature> }) => void,
@@ -195,6 +197,7 @@ export default class Camera extends React.Component<PropsType, StateType> {
     flashMode: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     whiteBalance: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     autoFocus: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
+    autoFocusPointOfInterest: PropTypes.shape({ x: PropTypes.number, y: PropTypes.number }),
     permissionDialogTitle: PropTypes.string,
     permissionDialogMessage: PropTypes.string,
     notAuthorizedView: PropTypes.element,
@@ -250,6 +253,7 @@ export default class Camera extends React.Component<PropsType, StateType> {
     super(props);
     this._lastEvents = {};
     this._lastEventsTimes = {};
+    this._isMounted = true;
     this.state = {
       isAuthorized: false,
       isAuthorizationChecked: false,
@@ -287,6 +291,9 @@ export default class Camera extends React.Component<PropsType, StateType> {
     } else if (typeof options.quality === 'string') {
       options.quality = Camera.Constants.VideoQuality[options.quality];
     }
+    if (typeof options.orientation === 'string') {
+      options.orientation = CameraManager.Orientation[options.orientation];
+    }
     return await CameraManager.record(options, this._cameraHandle);
   }
 
@@ -314,7 +321,7 @@ export default class Camera extends React.Component<PropsType, StateType> {
     }
   };
 
-  _onPictureSaved = ({ nativeEvent }) => {
+  _onPictureSaved = ({ nativeEvent }: EventCallbackArgumentsType) => {
     if (this.props.onPictureSaved) {
       this.props.onPictureSaved(nativeEvent);
     }
@@ -349,7 +356,11 @@ export default class Camera extends React.Component<PropsType, StateType> {
     }
   };
 
-  async componentWillMount() {
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  async componentDidMount() {
     const hasVideoAndAudio = this.props.captureAudio;
     const isAuthorized = await requestPermissions(
       hasVideoAndAudio,
@@ -357,6 +368,9 @@ export default class Camera extends React.Component<PropsType, StateType> {
       this.props.permissionDialogTitle,
       this.props.permissionDialogMessage,
     );
+    if (this._isMounted === false) {
+      return;
+    }
     this.setState({ isAuthorized, isAuthorizationChecked: true });
   }
 
@@ -429,7 +443,6 @@ export default class Camera extends React.Component<PropsType, StateType> {
       delete newProps.googleVisionBarcodeType;
       delete newProps.googleVisionBarcodeDetectorEnabled;
       delete newProps.ratio;
-      delete newProps.textRecognizerEnabled;
     }
 
     return newProps;

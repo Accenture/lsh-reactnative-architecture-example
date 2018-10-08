@@ -2,10 +2,17 @@
 platform :ios, '11.4'
 
 target 'Frontend' do
+  pod 'AppCenter/Crashes', '~> 1.9.0'
+  pod 'AppCenter/Analytics', '~> 1.9.0'
+  pod 'AppCenterReactNativeShared', '~> 1.8.1'
   # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
   # use_frameworks!
   pod 'CodePush', :path => '../node_modules/react-native-code-push'
 
   pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+
+  pod 'RNI18n', :path => '../node_modules/react-native-i18n'
+
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
 end

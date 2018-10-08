@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { View, YellowBox } from 'react-native';
 import { Provider } from 'mobx-react';
-// import codePush from 'react-native-code-push';  /* commenting because of build fail*/
+import codePush from 'react-native-code-push'; /* commenting because of build fail */
 import styles from './layout/layout.style';
 import stores from './Stores';
 import Navigator from './Navigator';
 
-// @codePush
+@codePush
 export default class App extends Component {
   render() {
     const { navigatorStyle, viewStyle } = styles;
