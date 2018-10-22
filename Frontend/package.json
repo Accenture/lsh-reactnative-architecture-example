@@ -16,9 +16,6 @@
     "pretty": "prettier --write \"src/**/*.js\""
   },
   "dependencies": {
-    "appcenter": "^1.8.1",
-    "appcenter-analytics": "^1.8.1",
-    "appcenter-crashes": "^1.8.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-decorators": "^6.24.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.5",
